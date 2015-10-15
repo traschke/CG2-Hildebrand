@@ -28,7 +28,7 @@ define(["util", "vec2", "Scene", "PointDragger"],
          *       begin of the form { width: 2, color: "#00FF00" }
          */
 
-        var Line = function(middle, radius, lineStyle) {
+        var Circle = function(middle, radius, lineStyle) {
 
             console.log("creating circle at [" +
             middle[0] + "," + middle[1] + "] with radius " + radius + ".");
@@ -93,7 +93,7 @@ define(["util", "vec2", "Scene", "PointDragger"],
         };
 
         // this module only exports the constructor for StraightLine objects
-        return Line;
+        return Circle;
 
     })); // define
 
