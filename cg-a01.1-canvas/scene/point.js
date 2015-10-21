@@ -53,11 +53,11 @@ define(["util", "vec2", "Scene", "PointDragger"],
                 context.lineWidth = this.lineStyle.width;
                 context.strokeStyle = this.lineStyle.color;
                 context.fillStyle = this.lineStyle.color;
-
-                // actually start drawing
-                context.stroke();
                 // fill the circle
                 context.fill();
+                // actually start drawing
+                context.stroke();
+
 
             };
 
