@@ -34,7 +34,7 @@ requirejs.config({
         "BoundingBox" : "./kdtree/boundingbox",
         "KdNode" : "./kdtree/kdnode",
         "KdTree" : "./kdtree/kdtree",
-        "KdUtil" : "./kdtree/kdutil",
+        "kdutil" : "./kdtree/kdutil",
 
         "vec2" : "./math/vec2",
 
