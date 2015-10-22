@@ -81,9 +81,48 @@ define(["util", "vec2", "Scene", "PointDragger"],
 
                 // create closure and callbacks for dragger
                 var _circle = this;
-                var getMiddle = function() { return _circle.middle; };
-                var setMiddle = function(dragEvent) { _circle.middle = dragEvent.position; };
-                draggers.push( new PointDragger(getMiddle, setMiddle, draggerStyle) );
+
+                /**
+                 * Callback to get the position of the Middle dragger.
+                 * @returns {*|number[]}
+                 */
+                var getPosMiddleDragger = function() {
+                    return _circle.middle;
+                };
+
+                /**
+                 * Callback to change the circle position.
+                 * @param dragEvent
+                 */
+                var setMiddle = function(dragEvent) {
+                    _circle.middle = dragEvent.position;
+                };
+
+                /**
+                 * Callback to get the position of the Radius dragger.
+                 * @returns {*[]}
+                 */
+                var getPosRadiusDragger = function() {
+                    return [
+                        _circle.middle[0] + (_circle.radius / 2),
+                        _circle.middle[1] + (_circle.radius / 2)
+                    ];
+                }
+
+                /**
+                 * Callback to change the circle radius.
+                 * @param dragEvent
+                 */
+                var setRadius = function(dragEvent) {
+                    var newRadius = _circle.radius + dragEvent.delta[0];
+                    // Check if radius is bigger than 0.
+                    if (newRadius > 0) {
+                        _circle.radius = newRadius;
+                    }
+                }
+
+                draggers.push(new PointDragger(getPosMiddleDragger, setMiddle, draggerStyle));
+                draggers.push(new PointDragger(getPosRadiusDragger, setRadius, draggerStyle));
 
                 return draggers;
 
