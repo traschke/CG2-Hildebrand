@@ -38,7 +38,7 @@ define(["util", "vec2", "Scene", "PointDragger"],
 
             // initial values in case either point is undefined
             this.middle = middle || [10,10];
-            this.radius = 3;
+            this.radius = 5;
 
             // draw this line into the provided 2D rendering context
             this.draw = function(context) {

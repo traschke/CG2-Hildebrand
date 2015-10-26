@@ -198,8 +198,7 @@ define(["jquery", "Line", "Circle", "Point", "KdTree", "util", "kdutil"],
 
                 var numPoints = parseInt($("#numPoints").attr("value"));;
                 for(var i=0; i<numPoints; ++i) {
-                    var point = new Point([randomX(), randomY()], 5,
-                        style);
+                    var point = new Point([randomX(), randomY()], style);
                     scene.addObjects([point]);
                     pointList.push(point);
                 }
