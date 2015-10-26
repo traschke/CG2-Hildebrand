@@ -28,16 +28,16 @@ define(["util", "vec2", "Scene", "PointDragger"],
          *       begin of the form { width: 2, color: "#00FF00" }
          */
 
-        var Point = function(middle, lineStyle) {
+        var Point = function(center, lineStyle) {
 
             console.log("creating point at [" +
-            middle[0] + "," + middle[1] + "].");
+            center[0] + "," + center[1] + "].");
 
             // draw style for drawing the line
             this.lineStyle = lineStyle || { width: "2", color: "#0000AA" };
 
             // initial values in case either point is undefined
-            this.middle = middle || [10,10];
+            this.center = center || [10,10];
             this.radius = 5;
 
             // draw this line into the provided 2D rendering context
@@ -47,7 +47,7 @@ define(["util", "vec2", "Scene", "PointDragger"],
                 context.beginPath();
 
                 // set points to be drawn
-                context.arc(this.middle[0], this.middle[1], this.radius, 0, 2 * Math.PI);
+                context.arc(this.center[0], this.center[1], this.radius, 0, 2 * Math.PI);
 
                 // set drawing style
                 context.lineWidth = this.lineStyle.width;
@@ -65,7 +65,7 @@ define(["util", "vec2", "Scene", "PointDragger"],
             this.isHit = function(context,mousePos) {
 
                 // what is my current position?
-                var middle = this.middle;
+                var middle = this.center;
 
                 // check whether distance between mouse and dragger's center
                 // is less or equal ( radius + (line width)/2 )
@@ -84,8 +84,8 @@ define(["util", "vec2", "Scene", "PointDragger"],
 
                 // create closure and callbacks for dragger
                 var _circle = this;
-                var getMiddle = function() { return _circle.middle; };
-                var setMiddle = function(dragEvent) { _circle.middle = dragEvent.position; };
+                var getMiddle = function() { return _circle.center; };
+                var setMiddle = function(dragEvent) { _circle.center = dragEvent.position; };
                 draggers.push( new PointDragger(getMiddle, setMiddle, draggerStyle) );
 
                 return draggers;

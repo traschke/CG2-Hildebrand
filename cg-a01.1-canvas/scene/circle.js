@@ -28,16 +28,16 @@ define(["util", "vec2", "Scene", "PointDragger"],
          *       begin of the form { width: 2, color: "#00FF00" }
          */
 
-        var Circle = function(middle, radius, lineStyle) {
+        var Circle = function(center, radius, lineStyle) {
 
             console.log("creating circle at [" +
-            middle[0] + "," + middle[1] + "] with radius " + radius + ".");
+            center[0] + "," + center[1] + "] with radius " + radius + ".");
 
             // draw style for drawing the line
             this.lineStyle = lineStyle || { width: "2", color: "#0000AA" };
 
             // initial values in case either point is undefined
-            this.middle = middle || [10,10];
+            this.center = center || [10,10];
             this.radius = radius || 10;
 
             // draw this line into the provided 2D rendering context
@@ -47,7 +47,7 @@ define(["util", "vec2", "Scene", "PointDragger"],
                 context.beginPath();
 
                 // set points to be drawn
-                context.arc(this.middle[0], this.middle[1], this.radius, 0, 2 * Math.PI);
+                context.arc(this.center[0], this.center[1], this.radius, 0, 2 * Math.PI);
 
                 // set drawing style
                 context.lineWidth = this.lineStyle.width;
@@ -62,7 +62,7 @@ define(["util", "vec2", "Scene", "PointDragger"],
             this.isHit = function(context,mousePos) {
 
                 // what is my current position?
-                var middle = this.middle;
+                var middle = this.center;
 
                 // check whether distance between mouse and dragger's center
                 // is less or equal ( radius + (line width)/2 )
@@ -87,7 +87,7 @@ define(["util", "vec2", "Scene", "PointDragger"],
                  * @returns {*|number[]}
                  */
                 var getPosMiddleDragger = function() {
-                    return _circle.middle;
+                    return _circle.center;
                 };
 
                 /**
@@ -95,7 +95,7 @@ define(["util", "vec2", "Scene", "PointDragger"],
                  * @param dragEvent
                  */
                 var setMiddle = function(dragEvent) {
-                    _circle.middle = dragEvent.position;
+                    _circle.center = dragEvent.position;
                 };
 
                 /**
@@ -104,8 +104,8 @@ define(["util", "vec2", "Scene", "PointDragger"],
                  */
                 var getPosRadiusDragger = function() {
                     return [
-                        _circle.middle[0] + (_circle.radius / 2),
-                        _circle.middle[1] + (_circle.radius / 2)
+                        _circle.center[0] + (_circle.radius / 2),
+                        _circle.center[1] + (_circle.radius / 2)
                     ];
                 }
 
