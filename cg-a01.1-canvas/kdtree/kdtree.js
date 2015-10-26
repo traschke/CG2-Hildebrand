@@ -32,32 +32,92 @@ define(["kdutil", "vec2", "Scene", "KdNode", "BoundingBox"],
              * @returns returns root node after tree is build
              */
             this.build = function(pointList, dim, parent, isLeft) {
+                //console.log("This is pointlist of build()-function: ", pointList);
+
+                /*
+                 * FIXME The build-process of the KD-Tree is faulty. With more than 6 point, the KD-Tree is rendered
+                 * incorrect.
+                 */
+
 
                 // IMPLEMENT!
                 // create new node
+                var node = new KdNode(dim);
 
                 // find median position in pointList
+                var medianPos = KdUtil.median(pointList, dim);
+                var medianPoint = pointList[medianPos];
+                //console.log("This is the median at pos " + medianPos + ": ", medianPoint);
                 
                 // compute next axis
-                
+                var nextAxis;
+                if (dim === 0) {
+                    nextAxis = 1;
+                } else {
+                    nextAxis = 0;
+                }
+
                 // set point in node
+                node.point = medianPoint;
                 
                 // compute bounding box for node
                 // check if node is root (has no parent)
                 // 
                 // take a look in findNearestNeighbor why we 
                 // need this bounding box!
+                var bbox;
                 if( !parent ) {
                     // Note: hardcoded canvas size here
+                    bbox = new BoundingBox(0, 0, 500, 400, medianPoint, dim);
                 } else {
-                    // create bounding box and distinguish between axis and
-                    // which side (left/right) the node is on
+                    // create bounding box and distinguish between axis and which side (left/right) the node is on
+                    // 0=x, 1=y
+                    if (dim === 0) {
+                        if (isLeft) {
+                            var newXMin = parent.bbox.xmin;
+                            var newXMax = parent.bbox.xmax;
+                            var newYMin = parent.bbox.ymin;
+                            var newYMax = parent.bbox.ymax - (400 - parent.point.center[1]);
+                            bbox = new BoundingBox(newXMin, newYMin, newXMax, newYMax, medianPoint, dim);
+                        } else {
+                            var newXMin = parent.bbox.xmin;
+                            var newXMax = parent.bbox.xmax;
+                            var newYMin = parent.bbox.ymin + parent.point.center[1];
+                            var newYMax = parent.bbox.ymax;
+                            bbox = new BoundingBox(newXMin, newYMin, newXMax, newYMax, medianPoint, dim);
+                        }
+                    } else {
+                        if (isLeft) {
+                            var newXMin = parent.bbox.xmin;
+                            var newXMax = parent.bbox.xmax - (500 - parent.point.center[0]);
+                            var newYMin = parent.bbox.ymin;
+                            var newYMax = parent.bbox.ymax;
+                            bbox = new BoundingBox(newXMin, newYMin, newXMax, newYMax, medianPoint, dim);
+                        } else {
+                            var newXMin = parent.bbox.xmin + parent.point.center[0];
+                            var newXMax = parent.bbox.xmax;
+                            var newYMin = parent.bbox.ymin;
+                            var newYMax = parent.bbox.ymax;
+                            bbox = new BoundingBox(newXMin, newYMin, newXMax, newYMax, medianPoint, dim);
+                        }
+                    }
                 }
+                node.bbox = bbox;
 
                 // create point list left/right and
                 // call build for left/right arrays
+                var leftChildren = pointList.slice(0, medianPos);
+                var rightChildren = pointList.slice(medianPos + 1);
+
+                if (leftChildren.length !== 0) {
+                    node.leftChild = this.build(leftChildren, nextAxis, node, true);
+                }
+                if (rightChildren.length !== 0) {
+                    node.rightChild = this.build(rightChildren, nextAxis, node, false);
+                }
                 
                 // return root node
+                return node;
             };
 
             /**
