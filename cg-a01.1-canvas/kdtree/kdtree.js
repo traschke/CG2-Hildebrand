@@ -39,6 +39,9 @@ define(["kdutil", "vec2", "Scene", "KdNode", "BoundingBox"],
                  * incorrect.
                  */
 
+                if (pointList.length === 0) {
+                    return undefined;
+                }
 
                 // IMPLEMENT!
                 // create new node
@@ -77,24 +80,24 @@ define(["kdutil", "vec2", "Scene", "KdNode", "BoundingBox"],
                             var newXMin = parent.bbox.xmin;
                             var newXMax = parent.bbox.xmax;
                             var newYMin = parent.bbox.ymin;
-                            var newYMax = parent.bbox.ymax - (400 - parent.point.center[1]);
+                            var newYMax = parent.point.center[1];
                             bbox = new BoundingBox(newXMin, newYMin, newXMax, newYMax, medianPoint, dim);
                         } else {
                             var newXMin = parent.bbox.xmin;
                             var newXMax = parent.bbox.xmax;
-                            var newYMin = parent.bbox.ymin + parent.point.center[1];
+                            var newYMin = parent.point.center[1];
                             var newYMax = parent.bbox.ymax;
                             bbox = new BoundingBox(newXMin, newYMin, newXMax, newYMax, medianPoint, dim);
                         }
                     } else {
                         if (isLeft) {
                             var newXMin = parent.bbox.xmin;
-                            var newXMax = parent.bbox.xmax - (500 - parent.point.center[0]);
+                            var newXMax = parent.point.center[0];
                             var newYMin = parent.bbox.ymin;
                             var newYMax = parent.bbox.ymax;
                             bbox = new BoundingBox(newXMin, newYMin, newXMax, newYMax, medianPoint, dim);
                         } else {
-                            var newXMin = parent.bbox.xmin + parent.point.center[0];
+                            var newXMin = parent.point.center[0];
                             var newXMax = parent.bbox.xmax;
                             var newYMin = parent.bbox.ymin;
                             var newYMax = parent.bbox.ymax;
@@ -105,16 +108,12 @@ define(["kdutil", "vec2", "Scene", "KdNode", "BoundingBox"],
                 node.bbox = bbox;
 
                 // create point list left/right and
-                // call build for left/right arrays
                 var leftChildren = pointList.slice(0, medianPos);
                 var rightChildren = pointList.slice(medianPos + 1);
 
-                if (leftChildren.length !== 0) {
-                    node.leftChild = this.build(leftChildren, nextAxis, node, true);
-                }
-                if (rightChildren.length !== 0) {
-                    node.rightChild = this.build(rightChildren, nextAxis, node, false);
-                }
+                // call build for left/right arrays
+                node.leftChild = this.build(leftChildren, nextAxis, node, true);
+                node.rightChild = this.build(rightChildren, nextAxis, node, false);
                 
                 // return root node
                 return node;
