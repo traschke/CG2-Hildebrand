@@ -14,8 +14,8 @@
 
 
 /* requireJS module definition */
-define(["util", "vec2", "Scene", "PointDragger", "Point", "Polygon"],
-    (function(util,vec2,Scene,PointDragger,Point,Polygon) {
+define(["util", "vec2", "Scene", "PointDragger"],
+    (function(util,vec2,Scene,PointDragger) {
 
         "use strict";
 
@@ -33,9 +33,6 @@ define(["util", "vec2", "Scene", "PointDragger", "Point", "Polygon"],
             this.p2 = p2;
             this.p3 = p3;
 
-            var poly;
-
-
             // draw style for drawing the line
             this.lineStyle = lineStyle || { width: "2", color: "#0000AA" };
 
@@ -46,8 +43,8 @@ define(["util", "vec2", "Scene", "PointDragger", "Point", "Polygon"],
                 context.beginPath();
 
                 // set points to be drawn
-                context.moveTo(p1.center[0],p1.center[1]);
-                context.quadraticCurveTo(p2.center[0], p2.center[1], p3.center[0], p3.center[1])
+                context.moveTo(this.p1[0], this.p1[1]);
+                context.quadraticCurveTo(this.p2[0], this.p2[1], this.p3[0], this.p3[1]);
 
                 // set drawing style
                 context.lineWidth = this.lineStyle.width;
@@ -58,24 +55,18 @@ define(["util", "vec2", "Scene", "PointDragger", "Point", "Polygon"],
 
             };
 
+            // TODO Bezier Hit Function
+            // TODO Bezier Polygon
             // test whether the mouse position is on this line segment
-            this.isHit = function(context,mousePos) {
-
-                // what is my current position?
-                var middle = p1.center;
-                console.log("hit!!!");
-
-                // check whether distance between mouse and dragger's center
-                // is less or equal ( radius + (line width)/2 )
-                var dx = mousePos[0] - middle[0];
-                var dy = mousePos[1] - middle[1];
-                var radius = this.radius;
-                return (dx*dx + dy*dy) <= (radius*radius);
-
+            this.isHit = function(context, pos) {
+                console.log('Clicked: ', pos);
+                var retValue = context.isPointInPath(pos[0], pos[1]);
+                console.log('Return value: ', retValue);
+                return retValue;
             };
 
             // return list of draggers to manipulate this line
-            this.createDraggers = function(context) {
+            this.createDraggers = function() {
 
                 var draggerStyle = { radius:4, color: this.lineStyle.color, width:0, fill:true }
                 var draggers = [];
@@ -86,8 +77,7 @@ define(["util", "vec2", "Scene", "PointDragger", "Point", "Polygon"],
                  * @returns {*|number[]}
                  */
                 var getPos1Dragger = function() {
-                    console.log("P1: " + p1.center);
-                    return p1.center;
+                    return _bezier.p1;
                 };
 
                 /**
@@ -95,8 +85,7 @@ define(["util", "vec2", "Scene", "PointDragger", "Point", "Polygon"],
                  * @returns {*|number[]}
                  */
                 var getPos2Dragger = function() {
-                    console.log("P2: " + p2.center);
-                    return p2.center;
+                    return _bezier.p2;
                 };
 
                 /**
@@ -104,43 +93,18 @@ define(["util", "vec2", "Scene", "PointDragger", "Point", "Polygon"],
                  * @returns {*|number[]}
                  */
                 var getPos3Dragger = function() {
-                    console.log("P3: " + p3.center);
-                    return p3.center;
+                    return _bezier.p3;
                 };
 
-                /**
-                 * Callback to change the circle position.
-                 * @param dragEvent
-                 */
-                var setMiddle = function(dragEvent) {
-                    _bezier.center = dragEvent.position;
-                };
-                var getPosMiddleDragger = function() {
-                    return _circle.center;
-                };
-
-                /**
-                 * Callback to change the circle position.
-                 * @param dragEvent
-                 */
-                var setMiddle = function(dragEvent) {
-                    _circle.center = dragEvent.position;
-                };
-
-                /**
-                 * Callback to get the position of the Radius dragger.
-                 * @returns {*[]}
-                 */
-                var getPosRadiusDragger = function() {
-                    return [
-                        _circle.center[0] + (_circle.radius / 2),
-                        _circle.center[1] + (_circle.radius / 2)
-                    ];
-                };
-
-                var setP1 = function(dragEvent) { _bezier.p1 = dragEvent.position; };
-                var setP2 = function(dragEvent) { _bezier.p2 = dragEvent.position; };
-                var setP3 = function(dragEvent) { _bezier.p3 = dragEvent.position; };
+                var setP1 = function(dragEvent) {
+                    _bezier.p1 = dragEvent.position;
+                }
+                var setP2 = function(dragEvent) {
+                    _bezier.p2 = dragEvent.position;
+                }
+                var setP3 = function(dragEvent) {
+                    _bezier.p3 = dragEvent.position;
+                }
 
                 draggers.push(new PointDragger(getPos1Dragger, setP1, draggerStyle));
                 draggers.push(new PointDragger(getPos2Dragger, setP2, draggerStyle));

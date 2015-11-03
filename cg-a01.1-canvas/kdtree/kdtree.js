@@ -34,11 +34,6 @@ define(["kdutil", "vec2", "Scene", "KdNode", "BoundingBox"],
             this.build = function(pointList, dim, parent, isLeft) {
                 //console.log("This is pointlist of build()-function: ", pointList);
 
-                /*
-                 * FIXME The build-process of the KD-Tree is faulty. With more than 6 point, the KD-Tree is rendered
-                 * incorrect.
-                 */
-
                 if (pointList.length === 0) {
                     return undefined;
                 }

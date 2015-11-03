@@ -108,7 +108,6 @@ define(["jquery", "Line", "Circle", "Point", "KdTree", "util", "kdutil", "Parame
                     color: randomColor()
                 };
 
-                // TODO: Add random radius
                 var point = new Point([randomX(), randomY()], style);
                 scene.addObjects([point]);
 
@@ -127,7 +126,6 @@ define(["jquery", "Line", "Circle", "Point", "KdTree", "util", "kdutil", "Parame
                     color: randomColor()
                 };
 
-                // TODO: Add random radius
                 var parametric_curve = new Parametric_curve($("#inputXt").val(), $("#inputYt").val(), $("#inputMint").val(), $("#inputMaxt").val(), $("#inputSegments").val(), style);
                 scene.addObjects([parametric_curve]);
 
@@ -146,8 +144,7 @@ define(["jquery", "Line", "Circle", "Point", "KdTree", "util", "kdutil", "Parame
                     color: randomColor()
                 };
 
-                // TODO: Add random radius
-                var bezier_curve = new Bezier_curve(new Point([randomX(), randomY()], style), new Point([randomX(), randomY()], style), new Point([randomX(), randomY()], style), style);
+                var bezier_curve = new Bezier_curve([randomX(), randomY()], [randomX(), randomY()], [randomX(), randomY()], style);
                 scene.addObjects([bezier_curve]);
 
                 // deselect all objects, then select the newly created object
@@ -279,8 +276,8 @@ define(["jquery", "Line", "Circle", "Point", "KdTree", "util", "kdutil", "Parame
                 console.log("query point: ", queryPoint.center);
 
                 ////////////////////////////////////////////////
-                // TODO: measure and compare timings of linear
-                //       and kd-nearest-neighbor search
+                // measure and compare timings of linear
+                // and kd-nearest-neighbor search
                 ////////////////////////////////////////////////
                 var linearTiming;
                 var kdTiming;

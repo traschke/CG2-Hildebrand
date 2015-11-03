@@ -36,8 +36,8 @@
 
 
 /* requireJS module definition */
-define(["util", "Scene", "Polygon", "Bezier_curve"],
-    (function(util,Scene, Polygon, Bezier_curve) {
+define(["util", "Scene"],
+    (function(util,Scene) {
 
         "use strict";
 
@@ -117,18 +117,14 @@ define(["util", "Scene", "Polygon", "Bezier_curve"],
                 }
 
                 // let the object create its draggers
-                var draggers = obj.createDraggers(context);
-                var poly = null;
+                var draggers = obj.createDraggers();
 
                 // store object and its draggers in an internal list
                 this.selected.push( { "obj": obj, "draggers": draggers } );
 
                 // add draggers as scene objects so they get rendered
                 this.scene.addObjects(draggers);
-                if(obj instanceof Bezier_curve){
-                    poly = new Polygon(obj.p1, obj.p2, obj.p3, obj.lineStyle);
-                    this.scene.addObjects([poly]);
-                }
+
                 // if it exists, trigger onSelection callback
                 this.selectCallback && this.selectCallback(obj);
 
@@ -136,6 +132,7 @@ define(["util", "Scene", "Polygon", "Bezier_curve"],
                 this.scene.draw(this.context);
 
             };
+
 
 
             /*
@@ -147,18 +144,12 @@ define(["util", "Scene", "Polygon", "Bezier_curve"],
 
                 // go backwards through list of currently selected objects
                 for(var i=this.selected.length-1; i>=0; i-=1) {
-                     //if(this.selected[i].obj instanceof Bezier_curve){
-                            //console.log(this.selected[i]);
-                            //this.scene.removeObjects([poly]);
-                            //console.log("löschi");
-                            //console.log(this.selected[i]);
-                        //}
 
                     // if no obj is specified, or if this object matches...
                     if(!obj || this.selected[i].obj == obj) {
+
                         // remove draggers from scene
                         this.scene.removeObjects(this.selected[i].draggers);
-                        console.log("löschi2");
                         // remove object from list
                         this.selected.splice(i,1);
                     }
