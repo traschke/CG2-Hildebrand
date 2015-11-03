@@ -29,6 +29,11 @@ define(["util", "vec2", "Scene", "PointDragger", "Point", "Polygon"],
          */
 
         var Bezier_curve = function(p1, p2, p3, lineStyle) {
+            this.p1 = p1;
+            this.p2 = p2;
+            this.p3 = p3;
+
+            var poly;
 
 
             // draw style for drawing the line
@@ -57,7 +62,8 @@ define(["util", "vec2", "Scene", "PointDragger", "Point", "Polygon"],
             this.isHit = function(context,mousePos) {
 
                 // what is my current position?
-                var middle = this.center;
+                var middle = p1.center;
+                console.log("hit!!!");
 
                 // check whether distance between mouse and dragger's center
                 // is less or equal ( radius + (line width)/2 )
@@ -69,7 +75,7 @@ define(["util", "vec2", "Scene", "PointDragger", "Point", "Polygon"],
             };
 
             // return list of draggers to manipulate this line
-            this.createDraggers = function() {
+            this.createDraggers = function(context) {
 
                 var draggerStyle = { radius:4, color: this.lineStyle.color, width:0, fill:true }
                 var draggers = [];
@@ -140,9 +146,6 @@ define(["util", "vec2", "Scene", "PointDragger", "Point", "Polygon"],
                 draggers.push(new PointDragger(getPos2Dragger, setP2, draggerStyle));
                 draggers.push(new PointDragger(getPos3Dragger, setP3, draggerStyle));
 
-                var poly = new Polygon(p1, p2, p3);
-                console.log(poly);
-                poly.draw();
 
                 return draggers;
 
