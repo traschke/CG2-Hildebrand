@@ -97,7 +97,7 @@ define(["util", "vec2", "Scene", "PointDragger", "Polygon"],
                     _bezier.p3 = e.position;
                 }
 
-                polys.push(new Polygon(getP1, getP2, getP3, setP1, setP2, setP3));
+                polys.push(new Polygon(getP1, getP2, getP3, setP1, setP2, setP3, polyStyle));
 
                 return polys;
             };
