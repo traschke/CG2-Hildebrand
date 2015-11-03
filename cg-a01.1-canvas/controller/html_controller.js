@@ -265,14 +265,26 @@ define(["jquery", "Line", "Circle", "Point", "KdTree", "util", "kdutil"],
                 ////////////////////////////////////////////////
                 var linearTiming;
                 var kdTiming;
+                var startTime = new Date().getTime();
+                var endTime;
 
                 var minIdx = KdUtil.linearSearch(pointList, queryPoint);
 
+                endTime = new Date().getTime();
+                linearTiming = endTime - startTime;
+
                 console.log("nearest neighbor linear: ", pointList[minIdx].center);
+                console.log("nearest neighbor linear took " + linearTiming + " msecs.");
+
+                startTime = new Date().getTime();
 
                 var kdNearestNeighbor = kdTree.findNearestNeighbor(kdTree.root, queryPoint, 10000000, kdTree.root, 0);
 
+                endTime = new Date().getTime();
+                kdTiming = endTime - startTime;
+
                 console.log("nearest neighbor kd: ", kdNearestNeighbor.point.center);
+                console.log("nearest neighbor kd took " + kdTiming + " msecs.");
 
                 sceneController.select(pointList[minIdx]);
                 sceneController.select(kdNearestNeighbor.point);
