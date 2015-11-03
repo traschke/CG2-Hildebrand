@@ -12,8 +12,8 @@
 
 
 /* requireJS module definition */
-define(["jquery", "Line", "Circle", "Point", "KdTree", "util", "kdutil"],
-    (function($, Line, Circle, Point, KdTree, Util, KdUtil) {
+define(["jquery", "Line", "Circle", "Point", "KdTree", "util", "kdutil", "Parametric_curve", "Bezier_curve"],
+    (function($, Line, Circle, Point, KdTree, Util, KdUtil, Parametric_curve, Bezier_curve) {
         "use strict";
 
         /*
@@ -115,6 +115,44 @@ define(["jquery", "Line", "Circle", "Point", "KdTree", "util", "kdutil"],
                 // deselect all objects, then select the newly created object
                 sceneController.deselect();
                 sceneController.select(point); // this will also redraw
+            });
+
+            /**
+             * Event handler for the New Parametric curve button.
+             */
+            $("#btnNewParametricCurve").click(function() {
+                // create the actual line and add it to the scene
+                var style = {
+                    width: Math.floor(Math.random()*3)+1,
+                    color: randomColor()
+                };
+
+                // TODO: Add random radius
+                var parametric_curve = new Parametric_curve($("#inputXt").val(), $("#inputYt").val(), $("#inputMint").val(), $("#inputMaxt").val(), $("#inputSegments").val(), style);
+                scene.addObjects([parametric_curve]);
+
+                // deselect all objects, then select the newly created object
+                sceneController.deselect();
+                sceneController.select(parametric_curve); // this will also redraw
+            });
+
+            /**
+             * Event handler for the New Parametric curve button.
+             */
+            $("#btnNewBezierCurve").click(function() {
+                // create the actual line and add it to the scene
+                var style = {
+                    width: Math.floor(Math.random()*3)+1,
+                    color: randomColor()
+                };
+
+                // TODO: Add random radius
+                var bezier_curve = new Bezier_curve(new Point([randomX(), randomY()], style), new Point([randomX(), randomY()], style), new Point([randomX(), randomY()], style), style);
+                scene.addObjects([bezier_curve]);
+
+                // deselect all objects, then select the newly created object
+                sceneController.deselect();
+                sceneController.select(bezier_curve); // this will also redraw
             });
 
             /**
