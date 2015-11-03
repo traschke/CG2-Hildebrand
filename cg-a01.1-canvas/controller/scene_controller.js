@@ -36,8 +36,8 @@
 
 
 /* requireJS module definition */
-define(["util", "Scene"],
-    (function(util,Scene) {
+define(["util", "Scene", "Bezier_curve", "Polygon"],
+    (function(util,Scene, Bezier_curve, Polygon) {
 
         "use strict";
 
@@ -119,8 +119,15 @@ define(["util", "Scene"],
                 // let the object create its draggers
                 var draggers = obj.createDraggers();
 
+                if (obj instanceof Bezier_curve) {
+                    var polys = obj.createPolygon();
+                    this.selected.push( { "obj": obj, "draggers": draggers, "polygon": polys } );
+                    this.scene.addObjects(polys);
+                } else {
+                    this.selected.push( { "obj": obj, "draggers": draggers } );
+                }
+
                 // store object and its draggers in an internal list
-                this.selected.push( { "obj": obj, "draggers": draggers } );
 
                 // add draggers as scene objects so they get rendered
                 this.scene.addObjects(draggers);
@@ -142,6 +149,7 @@ define(["util", "Scene"],
              */
             this.deselect = function(obj) {
 
+                console.log('List before: ', this.selected);
                 // go backwards through list of currently selected objects
                 for(var i=this.selected.length-1; i>=0; i-=1) {
 
@@ -150,9 +158,14 @@ define(["util", "Scene"],
 
                         // remove draggers from scene
                         this.scene.removeObjects(this.selected[i].draggers);
+                        if (obj instanceof Bezier_curve) {
+                            this.scene.removeObjects(this.selected[i].polygon);
+                            this.selected.splice(i,1);
+                        }
                         // remove object from list
                         this.selected.splice(i,1);
                     }
+                    console.log('List after: ', this.selected);
                 }
 
                 // redraw

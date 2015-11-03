@@ -14,8 +14,8 @@
 
 
 /* requireJS module definition */
-define(["util", "vec2", "Scene", "PointDragger"],
-    (function(util,vec2,Scene,PointDragger) {
+define(["util", "vec2", "Scene", "PointDragger", "Polygon"],
+    (function(util,vec2,Scene,PointDragger, Polygon) {
 
         "use strict";
 
@@ -59,10 +59,47 @@ define(["util", "vec2", "Scene", "PointDragger"],
             // TODO Bezier Polygon
             // test whether the mouse position is on this line segment
             this.isHit = function(context, pos) {
-                console.log('Clicked: ', pos);
-                var retValue = context.isPointInPath(pos[0], pos[1]);
-                console.log('Return value: ', retValue);
-                return retValue;
+                //var poly = new Polygon(this.p1, this.p2, this.p3, this.lineStyle);
+                //poly.draw(context);
+                //console.log('Clicked: ', pos);
+                //var retValue = context.isPointInPath(pos[0], pos[1]);
+                //console.log('Return value: ', retValue);
+                //return retValue;
+                return true;
+            };
+
+            this.createPolygon = function() {
+                var polyStyle = { width: "1", color: this.lineStyle.color }
+                var polys = [];
+                var _bezier = this;
+
+                var getP1 = function() {
+                    return _bezier.p1;
+                };
+
+                var getP2 = function() {
+                    return _bezier.p2;
+                };
+
+                var getP3 = function() {
+                    return _bezier.p3;
+                }
+
+                var setP1 = function(e) {
+                    _bezier.p1 = e.position;
+                };
+
+                var setP2 = function(e) {
+                    _bezier.p2 = e.position;
+                };
+
+                var setP3 = function(e) {
+                    _bezier.p3 = e.position;
+                }
+
+                polys.push(new Polygon(getP1, getP2, getP3, setP1, setP2, setP3));
+
+                return polys;
             };
 
             // return list of draggers to manipulate this line
@@ -98,13 +135,13 @@ define(["util", "vec2", "Scene", "PointDragger"],
 
                 var setP1 = function(dragEvent) {
                     _bezier.p1 = dragEvent.position;
-                }
+                };
                 var setP2 = function(dragEvent) {
                     _bezier.p2 = dragEvent.position;
-                }
+                };
                 var setP3 = function(dragEvent) {
                     _bezier.p3 = dragEvent.position;
-                }
+                };
 
                 draggers.push(new PointDragger(getPos1Dragger, setP1, draggerStyle));
                 draggers.push(new PointDragger(getPos2Dragger, setP2, draggerStyle));
@@ -114,7 +151,7 @@ define(["util", "vec2", "Scene", "PointDragger"],
                 return draggers;
 
             }
-        }
+        };
 
 
 
