@@ -30,6 +30,7 @@ define(["util", "vec2", "Scene", "PointDragger", "Point", "Polygon"],
 
         var Bezier_curve = function(p1, p2, p3, lineStyle) {
 
+
             // draw style for drawing the line
             this.lineStyle = lineStyle || { width: "2", color: "#0000AA" };
 
@@ -107,19 +108,30 @@ define(["util", "vec2", "Scene", "PointDragger", "Point", "Polygon"],
                  */
                 var setMiddle = function(dragEvent) {
                     _bezier.center = dragEvent.position;
-                }
+                };
+                var getPosMiddleDragger = function() {
+                    return _circle.center;
+                };
 
                 /**
-                 * Callback to change the circle radius.
+                 * Callback to change the circle position.
                  * @param dragEvent
                  */
-                var setRadius = function(dragEvent) {
-                    var newRadius = _bezier.radius + dragEvent.delta[0];
-                    // Check if radius is bigger than 0.
-                    if (newRadius > 0) {
-                        _bezier.radius = newRadius;
-                    }
-                }
+                var setMiddle = function(dragEvent) {
+                    _circle.center = dragEvent.position;
+                };
+
+                /**
+                 * Callback to get the position of the Radius dragger.
+                 * @returns {*[]}
+                 */
+                var getPosRadiusDragger = function() {
+                    return [
+                        _circle.center[0] + (_circle.radius / 2),
+                        _circle.center[1] + (_circle.radius / 2)
+                    ];
+                };
+
                 var setP1 = function(dragEvent) { _bezier.p1 = dragEvent.position; };
                 var setP2 = function(dragEvent) { _bezier.p2 = dragEvent.position; };
                 var setP3 = function(dragEvent) { _bezier.p3 = dragEvent.position; };
@@ -134,10 +146,10 @@ define(["util", "vec2", "Scene", "PointDragger", "Point", "Polygon"],
 
                 return draggers;
 
-            };
+            }
+        }
 
 
-        };
 
         // this module only exports the constructor for StraightLine objects
         return Bezier_curve;

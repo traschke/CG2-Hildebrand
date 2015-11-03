@@ -9,6 +9,7 @@
 define(["Scene", "PointDragger", "Point", "Line"],
     (function(xT, yT, minT, maxT, segments, Point, Line) {
 
+
         "use strict";
 
 

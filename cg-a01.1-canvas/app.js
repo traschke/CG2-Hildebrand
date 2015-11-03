@@ -33,7 +33,6 @@ requirejs.config({
         "Parametric_curve" : "./scene/parametric_curve",
         "Bezier_curve" : "./scene/bezier_curve",
         "Polygon" : "./scene/polygon",
-
         "BoundingBox" : "./kdtree/boundingbox",
         "KdNode" : "./kdtree/kdnode",
         "KdTree" : "./kdtree/kdtree",
