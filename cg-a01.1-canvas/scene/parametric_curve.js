@@ -33,8 +33,6 @@ define(["util", "vec2", "Scene", ],
 
             // draw this line into the provided 2D rendering context
             this.draw = function(context) {
-                console.log('x(t): ', this.xT);
-                console.log('y(t): ', this.yT);
 
                 this.pointList = [];
 
@@ -43,6 +41,7 @@ define(["util", "vec2", "Scene", ],
 
                 // calculate points
                 for( var i = 0; i <= this.segments; i++){
+                    // t seems to be not used, but it is used in eval() function
                     var t = this.minT + i * abstand;
                     var px = eval(this.xT);
                     var py = eval(this.yT);
@@ -91,7 +90,6 @@ define(["util", "vec2", "Scene", ],
                     context.lineWidth = "1";
                     context.strokeStyle = "#FF0000";
 
-
                     // actually start drawing tick marks
                     context.stroke();
                 }
@@ -101,15 +99,24 @@ define(["util", "vec2", "Scene", ],
             this.isHit = function(context, pos) {
                 var t = 0;
                 for (var i = 0; i < this.pointList.length - 1; i++) {
+                    // project point on line, get parameter of that projection point
                     t = vec2.projectPointOnLine(pos, this.pointList[i], this.pointList[i + 1]);
+
+                    // inside the line segment?
                     if (t >= 0 && t <= 1) {
+                        // coordinates of the projected point
                         var p = vec2.add(this.pointList[i], vec2.mult(vec2.sub(this.pointList[i + 1], this.pointList[i]), t));
+
+                        // distance of the point from the line
                         var distance = vec2.length(vec2.sub(p, pos));
+
+                        // allow 2 pixels extra "sensitivity"
                         if (distance <= (this.lineStyle.width / 2) + 2) {
-                            return true
+                            return true;
                         }
                     }
                 }
+                // if no segment matches, return false
                 return false;
             };
 
