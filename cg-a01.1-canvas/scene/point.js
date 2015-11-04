@@ -20,18 +20,15 @@ define(["util", "vec2", "Scene", "PointDragger"],
         "use strict";
 
         /**
-         *  A simple straight line that can be dragged
-         *  around by its endpoints.
-         *  Parameters:
-         *  - point0 and point1: array objects representing [x,y] coordinates of start and end point
-         *  - lineStyle: object defining width and color attributes for line drawing,
-         *       begin of the form { width: 2, color: "#00FF00" }
+         * A simple point that can be dragged.
+         *
+         * @param center Array object representing [x,y] coordinates of the points center.
+         * @param lineStyle Object defining width and color attributes for line drawing, begin of the form { width: 2, color: "#00FF00" }
+         * @constructor
          */
-
         var Point = function(center, lineStyle) {
 
-            console.log("creating point at [" +
-            center[0] + "," + center[1] + "].");
+            console.log("creating point at", center);
 
             // draw style for drawing the line
             this.lineStyle = lineStyle || { width: "2", color: "#0000AA" };

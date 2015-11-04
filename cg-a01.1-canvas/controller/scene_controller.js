@@ -121,6 +121,7 @@ define(["util", "Scene", "Bezier_curve", "Polygon"],
                 // add draggers as scene objects so they get rendered
                 this.scene.addObjects(draggers);
 
+                // if obj is bezier add it's polygon.
                 if (obj instanceof Bezier_curve) {
                     var polys = obj.createPolygon();
                     this.selected.push( { "obj": obj, "draggers": draggers, "polygon": polys } );
@@ -155,6 +156,7 @@ define(["util", "Scene", "Bezier_curve", "Polygon"],
                     // if no obj is specified, or if this object matches...
                     if(!obj || this.selected[i].obj == obj) {
 
+                        // if obj is Bezier, remove it's polygon.
                         if (this.selected[i].obj instanceof Bezier_curve) {
                             this.scene.removeObjects(this.selected[i].polygon);
                         }

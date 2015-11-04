@@ -12,22 +12,62 @@ define(["util", "vec2", "Scene", ],
 
         "use strict";
 
-
+        /**
+         * A parametric curve. Cannot be dragged or moved.
+         *
+         * @param xT The function for the x values.
+         * @param yT The function for the y values.
+         * @param minT The minimum t.
+         * @param maxT The maximum t.
+         * @param segments Number of segments.
+         * @param lineStyle Object defining width and color attributes for line drawing, begin of the form { width: 2, color: "#00FF00" }
+         * @constructor
+         */
         var Parametric_curve = function(xT, yT, minT, maxT, segments, lineStyle) {
+            console.log("Creating parametric curve with x(t)=", xT, ", y(t)=", yT, ", minT=", minT, "maxT=", maxT, ",", segments, "segments and linestyle", lineStyle);
 
-            // function for x
+            /**
+             * Function for the x values.
+             */
             this.xT = xT;
-            // function for y
+
+            /**
+             * Function for the y values.
+             */
             this.yT = yT;
 
+            /**
+             * Value of minT.
+             */
             this.minT = minT;
+
+            /**
+             * Value of maxT.
+             */
             this.maxT = maxT;
+
+            /**
+             * Number of segments.
+             * @type {*|number}
+             */
             this.segments = segments || 10;
 
+            /**
+             * Array of the points of the parametric curve.
+             * @type {Array} [x, y]
+             */
             this.pointList = [];
 
-            // draw style for drawing the line
+            /**
+             * draw style for drawing the line.
+             * @type {*|{width: string, color: string}}
+             */
             this.lineStyle = lineStyle || { width: "2", color: "#0000AA" };
+
+            /**
+             * Switch which determines whether do draw tick marks or not.
+             * @type {boolean}
+             */
             this.drawMarks = false;
 
 
@@ -37,7 +77,7 @@ define(["util", "vec2", "Scene", ],
                 this.pointList = [];
 
                 var abstand = (this.maxT - this.minT) / this.segments;
-                console.log('Abstand: ', abstand);
+                //console.log('Abstand: ', abstand);
 
                 // calculate points
                 for( var i = 0; i <= this.segments; i++){

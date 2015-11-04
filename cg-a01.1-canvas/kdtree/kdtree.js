@@ -38,7 +38,6 @@ define(["kdutil", "vec2", "Scene", "KdNode", "BoundingBox"],
                     return undefined;
                 }
 
-                // IMPLEMENT!
                 // create new node
                 var node = new KdNode(dim);
 
