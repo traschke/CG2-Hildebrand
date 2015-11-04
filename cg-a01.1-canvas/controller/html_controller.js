@@ -132,18 +132,32 @@ define(["jquery", "Line", "Circle", "Point", "KdTree", "util", "kdutil", "Parame
              * Event handler for the New Parametric curve button.
              */
             $("#btnNewParametricCurve").click(function() {
-                // create the actual line and add it to the scene
-                var style = {
-                    width: Math.floor(Math.random()*3)+1,
-                    color: randomColor()
-                };
+                try {
+                    var xT = $("#inputXt").val();
+                    var yT = $("#inputYt").val();
 
-                var parametric_curve = new Parametric_curve($("#inputXt").val(), $("#inputYt").val(), $("#inputMint").val(), $("#inputMaxt").val(), $("#inputSegments").val(), style);
-                scene.addObjects([parametric_curve]);
+                    // Test eval
+                    var t = 0;
+                    eval(xT);
+                    eval(yT);
 
-                // deselect all objects, then select the newly created object
-                sceneController.deselect();
-                sceneController.select(parametric_curve); // this will also redraw
+                    // create the actual line and add it to the scene
+                    var style = {
+                        width: Math.floor(Math.random()*3)+1,
+                        color: randomColor()
+                    };
+
+                    var parametric_curve = new Parametric_curve(xT, yT, $('#inputMint').val(), $("#inputMaxt").val(), $("#inputSegments").val(), style);
+                    scene.addObjects([parametric_curve]);
+
+                    // deselect all objects, then select the newly created object
+                    sceneController.deselect();
+                    sceneController.select(parametric_curve); // this will also redraw
+                } catch (e) {
+                        alert(e.message);
+                }
+
+
             });
 
             /**
