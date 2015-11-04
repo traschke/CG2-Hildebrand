@@ -111,13 +111,15 @@ define(["util", "Scene", "Bezier_curve", "Polygon"],
              * and adding them to the scene
              */
             this.select = function(obj) {
-
                 if(!obj) {
                     throw new "SceneController.select(): no object provided";
                 }
 
                 // let the object create its draggers
                 var draggers = obj.createDraggers();
+                // store object and its draggers in an internal list
+                // add draggers as scene objects so they get rendered
+                this.scene.addObjects(draggers);
 
                 if (obj instanceof Bezier_curve) {
                     var polys = obj.createPolygon();
@@ -127,10 +129,9 @@ define(["util", "Scene", "Bezier_curve", "Polygon"],
                     this.selected.push( { "obj": obj, "draggers": draggers } );
                 }
 
-                // store object and its draggers in an internal list
 
-                // add draggers as scene objects so they get rendered
-                this.scene.addObjects(draggers);
+
+
 
                 // if it exists, trigger onSelection callback
                 this.selectCallback && this.selectCallback(obj);
@@ -148,24 +149,20 @@ define(["util", "Scene", "Bezier_curve", "Polygon"],
              * obj is optional: if undefined/null, deselect all objects
              */
             this.deselect = function(obj) {
-
-                console.log('List before: ', this.selected);
                 // go backwards through list of currently selected objects
                 for(var i=this.selected.length-1; i>=0; i-=1) {
 
                     // if no obj is specified, or if this object matches...
                     if(!obj || this.selected[i].obj == obj) {
 
+                        if (this.selected[i].obj instanceof Bezier_curve) {
+                            this.scene.removeObjects(this.selected[i].polygon);
+                        }
                         // remove draggers from scene
                         this.scene.removeObjects(this.selected[i].draggers);
-                        if (obj instanceof Bezier_curve) {
-                            this.scene.removeObjects(this.selected[i].polygon);
-                            this.selected.splice(i,1);
-                        }
                         // remove object from list
-                        this.selected.splice(i,1);
+                        this.selected.splice(i, 1);
                     }
-                    console.log('List after: ', this.selected);
                 }
 
                 // redraw

@@ -58,6 +58,18 @@ define(["jquery", "Line", "Circle", "Point", "KdTree", "util", "kdutil", "Parame
                 return "#"+toHex2(r)+toHex2(g)+toHex2(b);
             };
 
+            var randomXT = function() {
+                var multiplier = Math.floor(Math.random() * 200) + 100;
+                var position = Math.floor(Math.random() * 100) + 100;
+                return position + "+" + multiplier + "*Math.sin(t)";
+            };
+
+            var randomYT = function() {
+                var multiplier = Math.floor(Math.random() * 200) + 100;
+                var position = Math.floor(Math.random() * 100) + 100;
+                return position + "+" + multiplier + "*Math.cos(t)";
+            };
+
             /**
              * event handler for "new line button".
              */
@@ -144,7 +156,7 @@ define(["jquery", "Line", "Circle", "Point", "KdTree", "util", "kdutil", "Parame
                     color: randomColor()
                 };
 
-                var bezier_curve = new Bezier_curve([randomX(), randomY()], [randomX(), randomY()], [randomX(), randomY()], style);
+                var bezier_curve = new Bezier_curve([randomX(), randomY()], [randomX(), randomY()], [randomX(), randomY()], style, $("#inputSegments").val());
                 scene.addObjects([bezier_curve]);
 
                 // deselect all objects, then select the newly created object
@@ -160,13 +172,43 @@ define(["jquery", "Line", "Circle", "Point", "KdTree", "util", "kdutil", "Parame
                 var object = this.getSelectedObject();
                 $("#inputLineWidth").val(object.lineStyle.width);
                 $("#inputColor").val(object.lineStyle.color);
+
+                // Disable all controls
+                $("#inputRadius").val(0);
+                $("#inputRadius").prop("disabled", true);
+                //$('#inputXt').prop('disabled', true);
+                //$('#inputYt').prop('disabled', true);
+                //$('#inputMint').prop('disabled', true);
+                //$('#inputMaxt').prop('disabled', true);
+                //$('#inputSegments').prop('disabled', true);
+                $('#visTickMarks').prop('disabled', true);
+
+                // enable controls for specific object
                 if (object instanceof Circle) {
                     $("#inputRadius").prop("disabled", false);
                     $("#inputRadius").val(object.radius);
-                } else {
-                    $("#inputRadius").val(0);
-                    $("#inputRadius").prop("disabled", true);
+                } else if (object instanceof Bezier_curve) {
+                    $('#inputSegments').val(object.segments);
+                    $('#visTickMarks').prop('checked', object.drawMarks);
+
+                    $('#visTickMarks').prop('disabled', false);
+                    $('#inputSegments').prop('disabled', false);
+                } else if (object instanceof Parametric_curve) {
+                    $('#inputSegments').val(object.segments);
+                    $('#visTickMarks').prop('checked', object.drawMarks);
+                    $('#inputXt').val(object.xT);
+                    $('#inputYt').val(object.yT);
+                    $('#inputMint').val(object.minT);
+                    $('#inputMaxt').val(object.maxT);
+
+                    $('#inputXt').prop('disabled', false);
+                    $('#inputYt').prop('disabled', false);
+                    $('#inputMint').prop('disabled', false);
+                    $('#inputMaxt').prop('disabled', false);
+                    $('#inputSegments').prop('disabled', false);
+                    $('#visTickMarks').prop('disabled', false);
                 }
+
             });
 
             /**
@@ -177,13 +219,57 @@ define(["jquery", "Line", "Circle", "Point", "KdTree", "util", "kdutil", "Parame
                 var object = this.getSelectedObject();
                 $("#inputLineWidth").val(object.lineStyle.width);
                 $("#inputColor").val(object.lineStyle.color);
+                // Disable all controls
+                $("#inputRadius").val(0);
+                $("#inputRadius").prop("disabled", true);
+                //$('#inputXt').prop('disabled', true);
+                //$('#inputYt').prop('disabled', true);
+                //$('#inputMint').prop('disabled', true);
+                //$('#inputMaxt').prop('disabled', true);
+                //$('#inputSegments').prop('disabled', true);
+                $('#visTickMarks').prop('disabled', true);
+
+                // enable controls for specific object
                 if (object instanceof Circle) {
                     $("#inputRadius").prop("disabled", false);
                     $("#inputRadius").val(object.radius);
-                } else {
-                    $("#inputRadius").val(0);
-                    $("#inputRadius").prop("disabled", true);
+                } else if (object instanceof Bezier_curve) {
+                    $('#visTickMarks').prop('checked', object.drawMarks);
+                    $('#visTickMarks').prop('disabled', false);
+                    $('#inputSegments').prop('disabled', false);
+                } else if (object instanceof Parametric_curve) {
+                    $('#visTickMarks').prop('checked', object.drawMarks);
+                    $('#inputXt').prop('disabled', false);
+                    $('#inputYt').prop('disabled', false);
+                    $('#inputMint').prop('disabled', false);
+                    $('#inputMaxt').prop('disabled', false);
+                    $('#inputSegments').prop('disabled', false);
+                    $('#visTickMarks').prop('disabled', false);
                 }
+            });
+
+            $('#inputSegments').change(function() {
+                var object = sceneController.getSelectedObject();
+                object.segments = this.value;
+                // deselect all objects, then select the newly created object
+                sceneController.deselect();
+                sceneController.select(object);
+            });
+
+            $('#inputMint').change(function() {
+                var object = sceneController.getSelectedObject();
+                object.minT = this.value;
+                // deselect all objects, then select the newly created object
+                sceneController.deselect();
+                sceneController.select(object);
+            });
+
+            $('#inputMaxt').change(function() {
+                var object = sceneController.getSelectedObject();
+                object.maxT = this.value;
+                // deselect all objects, then select the newly created object
+                sceneController.deselect();
+                sceneController.select(object);
             });
 
             /**
@@ -306,6 +392,16 @@ define(["jquery", "Line", "Circle", "Point", "KdTree", "util", "kdutil", "Parame
                 sceneController.select(kdNearestNeighbor.point);
 
             }));
+
+            $('#visTickMarks').change(function() {
+                var obj = sceneController.getSelectedObject();
+                if (obj instanceof Bezier_curve || obj instanceof Parametric_curve) {
+                    // check if checkbox is cheked or not and set the drawMarks clause true or false
+                    obj.drawMarks = $(this).is(':checked');
+                    // redraw
+                    sceneController.select(obj);
+                }
+            });
         };
 
 

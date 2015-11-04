@@ -30,7 +30,6 @@ define(["util", "vec2", "Scene", "PointDragger", "Point"],
                 var p3 = this.getP3();
 
                 context.beginPath();
-                console.log("go poly");
 
                 context.moveTo(p1[0],p1[1]);
                 context.lineTo(p2[0],p2[1]);
@@ -43,10 +42,6 @@ define(["util", "vec2", "Scene", "PointDragger", "Point"],
 
                 // actually start drawing
                 context.stroke(); 
-            }
-
-            this.mouseDrag = function(dragEvent) {
-                // TODO Implement
             }
 
         };

@@ -28,44 +28,111 @@ define(["util", "vec2", "Scene", "PointDragger", "Polygon"],
          *       begin of the form { width: 2, color: "#00FF00" }
          */
 
-        var Bezier_curve = function(p1, p2, p3, lineStyle) {
+        var Bezier_curve = function(p1, p2, p3, lineStyle, segments) {
             this.p1 = p1;
             this.p2 = p2;
             this.p3 = p3;
-
+            this.segments = segments || 10;
             // draw style for drawing the line
             this.lineStyle = lineStyle || { width: "2", color: "#0000AA" };
+            this.drawMarks = false;
+
+            this.pointList = [];
+
+            this.b0 = function(t) {
+                return Math.pow(1 - t, 3);
+            };
+
+            this.b1 = function(t) {
+                return 3 * Math.pow(1 - t, 2) * t;
+            };
+
+            this.b2 = function(t) {
+                return 3 * (1 - t) * Math.pow(t, 2);
+            }
+
+            this.b3 = function(t) {
+                return Math.pow(t, 3);
+            }
 
             // draw this line into the provided 2D rendering context
             this.draw = function(context) {
 
-                // draw actual line
+                this.pointList = [];
+
+                // first point
+                this.pointList.push(this.p1);
+
+                // calculate other points
+                for (var i = 1; i <= this.segments; i++) {
+                    var t = 1 / this.segments * i;
+
+                    var px = (this.b0(t) * this.p1[0])
+                        + (this.b1(t) * this.p2[0])
+                        + (this.b2(t) * this.p2[0])
+                        + (this.b3(t) * this.p3[0]);
+
+                    var py = (this.b0(t) * this.p1[1])
+                        + (this.b1(t) * this.p2[1])
+                        + (this.b2(t) * this.p2[1])
+                        + (this.b3(t) * this.p3[1]);
+
+                    this.pointList.push([px, py]);
+                }
+
+                // draw bezier curve
                 context.beginPath();
 
-                // set points to be drawn
-                context.moveTo(this.p1[0], this.p1[1]);
-                context.quadraticCurveTo(this.p2[0], this.p2[1], this.p3[0], this.p3[1]);
+                context.moveTo(this.pointList[0][0], this.pointList[0][1]);
+                for (var i = 1; i < this.pointList.length; i++) {
+                    context.lineTo(this.pointList[i][0], this.pointList[i][1]);
+                }
 
-                // set drawing style
+                // set drawing style for bezier curve
                 context.lineWidth = this.lineStyle.width;
                 context.strokeStyle = this.lineStyle.color;
 
-                // actually start drawing
+                // actually start drawing bezier curve
                 context.stroke();
 
+                if (this.drawMarks) {
+                    // draw tick marks
+                    context.beginPath();
+                    for (var i = 1; i < this.segments; i++) {
+                        var appr = vec2.sub(this.pointList[(i + 1)], this.pointList[(i - 1)]);
+                        var norm = [appr[1] * (-1), appr[0]];
+                        var normalizedVecN = vec2.mult(norm, (1 / vec2.length(norm)));
+
+                        var tickBegin = vec2.add(this.pointList[i], vec2.mult(normalizedVecN, 10));
+                        var tickEnd = vec2.sub(this.pointList[i], vec2.mult(normalizedVecN, 10));
+
+                        context.moveTo(tickBegin[0], tickBegin[1]);
+                        context.lineTo(tickEnd[0], tickEnd[1]);
+                    }
+                    // set drawing style for tick marks
+                    context.lineWidth = "1";
+                    context.strokeStyle = "#FF0000";
+
+
+                    // actually start drawing tick marks
+                    context.stroke();
+                }
             };
 
-            // TODO Bezier Hit Function
-            // TODO Bezier Polygon
             // test whether the mouse position is on this line segment
             this.isHit = function(context, pos) {
-                //var poly = new Polygon(this.p1, this.p2, this.p3, this.lineStyle);
-                //poly.draw(context);
-                //console.log('Clicked: ', pos);
-                //var retValue = context.isPointInPath(pos[0], pos[1]);
-                //console.log('Return value: ', retValue);
-                //return retValue;
-                return true;
+                var t = 0;
+                for (var i = 0; i < this.pointList.length - 1; i++) {
+                    t = vec2.projectPointOnLine(pos, this.pointList[i], this.pointList[i + 1]);
+                    if (t >= 0 && t <= 1) {
+                        var p = vec2.add(this.pointList[i], vec2.mult(vec2.sub(this.pointList[i + 1], this.pointList[i]), t));
+                        var distance = vec2.length(vec2.sub(p, pos));
+                        if (distance <= (this.lineStyle.width / 2) + 2) {
+                            return true
+                        }
+                    }
+                }
+                return false;
             };
 
             this.createPolygon = function() {

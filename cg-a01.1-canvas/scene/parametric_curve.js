@@ -6,8 +6,8 @@
 
 
 /* requireJS module definition */
-define(["Scene", "PointDragger", "Point", "Line"],
-    (function(xT, yT, minT, maxT, segments, Point, Line) {
+define(["util", "vec2", "Scene", ],
+    (function(util, vec2, Scene) {
 
 
         "use strict";
@@ -15,61 +15,95 @@ define(["Scene", "PointDragger", "Point", "Line"],
 
         var Parametric_curve = function(xT, yT, minT, maxT, segments, lineStyle) {
 
-            console.log("parametric_curve at :" +
-            xT + "," + yT + "," + minT + "," + maxT + "+" + segments);
+            // function for x
+            this.xT = xT;
+            // function for y
+            this.yT = yT;
+
+            this.minT = minT;
+            this.maxT = maxT;
+            this.segments = segments || 10;
+
+            this.pointList = [];
 
             // draw style for drawing the line
             this.lineStyle = lineStyle || { width: "2", color: "#0000AA" };
+            this.drawMarks = false;
+
 
             // draw this line into the provided 2D rendering context
             this.draw = function(context) {
+                console.log('x(t): ', this.xT);
+                console.log('y(t): ', this.yT);
 
-                // draw actual line
+                this.pointList = [];
+
+                var abstand = (this.maxT - this.minT) / this.segments;
+                console.log('Abstand: ', abstand);
+
+                // calculate points
+                for( var i = 0; i <= this.segments; i++){
+                    var t = this.minT + i * abstand;
+                    var px = eval(this.xT);
+                    var py = eval(this.yT);
+                    //console.log(this.xT, ' = ', px);
+                    //console.log(this.yT, ' = ', py);
+
+                    this.pointList.push([px, py]);
+                }
+
+                // draw actual parametric curve
                 context.beginPath();
-                var pointList = [];
-                var abstand = (maxT - minT) / segments;
-                console.log(abstand);
-
-                // berechnung
-                for( var x = 0; x < segments; x++){
-                    var t = minT + x*abstand;
-                    // set points to be drawn
-                    console.log("funktion: " + xT)
-                    var x1 = eval(xT);
-                    var y1 = eval(yT);
-                    console.log(x1 + " , " + y1);
-
-                    pointList.push({x:x1, y:y1});
+                context.moveTo(this.pointList[0][0], this.pointList[0][1]);
+                for (var i = 1; i < this.pointList.length; i++){
+                    context.lineTo(this.pointList[i][0], this.pointList[i][1]);
                 }
 
-                // zeichenn
-                for(var l = 0; l < pointList.length-1; l++){
-                    console.log(pointList[l] + " , " + pointList[l+1]);
-
-                   context.moveTo(pointList[l].x,pointList[l].y); 
-                   context.lineTo(pointList[l+1].x,pointList[l+1].y); 
-
-                   context.lineWidth = this.lineStyle.width;
-                   context.strokeStyle = this.lineStyle.color;
-                }
+                // set drawing style for parametric curve
+                context.lineWidth = this.lineStyle.width;
+                context.strokeStyle = this.lineStyle.color;
 
                 // actually start drawing
-               context.stroke();
+                context.stroke();
+
+                if (this.drawMarks) {
+                    // draw tick marks
+                    context.beginPath();
+                    for (var i = 1; i < this.segments; i++) {
+                        var appr = vec2.sub(this.pointList[(i + 1)], this.pointList[(i - 1)]);
+                        var norm = [appr[1] * (-1), appr[0]];
+                        var normalizedVecN = vec2.mult(norm, (1 / vec2.length(norm)));
+
+                        var tickBegin = vec2.add(this.pointList[i], vec2.mult(normalizedVecN, 10));
+                        var tickEnd = vec2.sub(this.pointList[i], vec2.mult(normalizedVecN, 10));
+
+                        context.moveTo(tickBegin[0], tickBegin[1]);
+                        context.lineTo(tickEnd[0], tickEnd[1]);
+                    }
+                    // set drawing style for tick marks
+                    context.lineWidth = "1";
+                    context.strokeStyle = "#FF0000";
+
+
+                    // actually start drawing tick marks
+                    context.stroke();
+                }
             };
 
             // test whether the mouse position is on this line segment
-            this.isHit = function(context,mousePos) {
-
-                // what is my current position?
-                var middle = this.center;
-
-                // check whether distance between mouse and dragger's center
-                // is less or equal ( radius + (line width)/2 )
-                var dx = mousePos[0] - middle[0];
-                var dy = mousePos[1] - middle[1];
-                var radius = this.radius;
-                return (dx*dx + dy*dy) <= (radius*radius);
-
+            this.isHit = function(context, pos) {
+                var t = 0;
+                for (var i = 0; i < this.pointList.length - 1; i++) {
+                    t = vec2.projectPointOnLine(pos, this.pointList[i], this.pointList[i + 1]);
+                    if (t >= 0 && t <= 1) {
+                        var p = vec2.add(this.pointList[i], vec2.mult(vec2.sub(this.pointList[i + 1], this.pointList[i]), t));
+                        var distance = vec2.length(vec2.sub(p, pos));
+                        if (distance <= (this.lineStyle.width / 2) + 2) {
+                            return true
+                        }
+                    }
+                }
+                return false;
             };
 
             // return empty list
