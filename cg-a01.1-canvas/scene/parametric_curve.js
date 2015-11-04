@@ -68,14 +68,21 @@ define(["util", "vec2", "Scene", ],
 
                 if (this.drawMarks) {
                     // draw tick marks
-                    context.beginPath();
-                    for (var i = 1; i < this.segments; i++) {
-                        var appr = vec2.sub(this.pointList[(i + 1)], this.pointList[(i - 1)]);
-                        var norm = [appr[1] * (-1), appr[0]];
-                        var normalizedVecN = vec2.mult(norm, (1 / vec2.length(norm)));
+                    var tickLengthPx = 30;
 
-                        var tickBegin = vec2.add(this.pointList[i], vec2.mult(normalizedVecN, 10));
-                        var tickEnd = vec2.sub(this.pointList[i], vec2.mult(normalizedVecN, 10));
+                    context.beginPath();
+
+                    // start with second point
+                    for (var i = 1; i < this.segments; i++) {
+                        // Calculate distance between the points neighbors
+                        var dist = vec2.sub(this.pointList[(i + 1)], this.pointList[(i - 1)]);
+                        // calc the normal
+                        var norm = [dist[1] * (-1), dist[0]];
+                        // normalize the vector
+                        var normalized = vec2.mult(norm, (1 / vec2.length(norm)));
+
+                        var tickBegin = vec2.add(this.pointList[i], vec2.mult(normalized, tickLengthPx / 2));
+                        var tickEnd = vec2.sub(this.pointList[i], vec2.mult(normalized, tickLengthPx / 2));
 
                         context.moveTo(tickBegin[0], tickBegin[1]);
                         context.lineTo(tickEnd[0], tickEnd[1]);
