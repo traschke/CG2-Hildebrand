@@ -21,6 +21,15 @@ define(["jquery", "BufferGeometry", "random", "band"],
          */
         var HtmlController = function(scene) {
 
+            /**
+             * The interval that handles the animation.
+             */
+            this.animationInterval;
+
+            var rotate = function(value) {
+                scene.currentMesh.rotation.y += value;
+            };
+
 
             $("#random").show();
             $("#band").hide();
@@ -63,6 +72,19 @@ define(["jquery", "BufferGeometry", "random", "band"],
 
                 scene.addBufferGeometry(bufferGeometryBand);
             }));
+
+            /**
+             * Handler for animation checkbox.
+             */
+            $('#chkAnimation').change(function() {
+                if ($(this).is(':checked')) {
+                    console.log('Animation started!');
+                    this.animationInterval = setInterval(rotate, 20, -0.01);
+                } else {
+                    console.log('Animation stoppped!');
+                    clearInterval(this.animationInterval);
+                }
+            });
 
 
         };
