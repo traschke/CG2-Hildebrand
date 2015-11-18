@@ -11,8 +11,8 @@
 
 
 /* requireJS module definition */
-define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid'],
-    (function($,BufferGeometry, Random, Band, Ellipsoid) {
+define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'funnel'],
+    (function($,BufferGeometry, Random, Band, Ellipsoid, Cosine, Funnel) {
         "use strict";
 
         /*
@@ -40,24 +40,24 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid'],
 
             $("#random").show();
             $("#band").hide();
-            $('#ellipsoid').hide();
+            $('#parametric').hide();
 
             $("#btnRandom").click( (function() {
                 $("#random").show();
                 $("#band").hide();
-                $('#ellipsoid').hide();
+                $('#parametric').hide();
             }));
 
             $("#btnBand").click( (function() {
                 $("#random").hide();
                 $("#band").show();
-                $('#ellipsoid').hide();
+                $('#parametric').hide();
             }));
 
-            $('#btnEllipsoid').click(function() {
+            $('#btnParametric').click(function() {
                 $("#random").hide();
                 $("#band").hide();
-                $('#ellipsoid').show();
+                $('#parametric').show();
             });
 
             $("#btnNewRandom").click( (function() {
@@ -89,7 +89,7 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid'],
                 scene.addBufferGeometry(bufferGeometryBand);
             }));
 
-            $('#btnNewEllipsoid').click(function() {
+            $('#btnNewParametric').click(function() {
                 var config = {
                     umin : parseInt($('#numUmin').attr('value')),
                     umax : parseInt($('#numUmax').attr('value')),
@@ -103,12 +103,49 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid'],
                 var b = parseInt($('#numB').attr('value'));
                 var c = parseInt($('#numC').attr('value'));
 
-                var ellipsoid = new Ellipsoid(a, b, c, config);
-                var bufferGeometryEllipsoid = new BufferGeometry();
-                bufferGeometryEllipsoid.addAttribute('position', ellipsoid.getPositions());
-                bufferGeometryEllipsoid.addAttribute('color', ellipsoid.getColors());
+                var geometry = undefined;
 
-                scene.addBufferGeometry(bufferGeometryEllipsoid);
+                switch ($('#selParametricSurface').val()) {
+                    case 'ellipsoid':
+                        geometry = new Ellipsoid(a, b, c, config);
+                        break;
+                    case 'cosine':
+                        geometry = new Cosine(a, b, c, config);
+                        break;
+                    case 'funnel':
+                        geometry = new Funnel(a, b, c, config);
+                        break;
+                }
+
+                var bufferGeometry = new BufferGeometry();
+                bufferGeometry.addAttribute('position', geometry.getPositions());
+                bufferGeometry.addAttribute('color', geometry.getColors());
+
+                scene.addBufferGeometry(bufferGeometry);
+            });
+
+            $('#selParametricSurface').change(function() {
+                console.log('Para changed!', this.value);
+                switch (this.value) {
+                    case 'ellipsoid':
+                        $('#numUmin').attr('value', Math.PI * (-1));
+                        $('#numUmax').attr('value', Math.PI);
+                        $('#numVmin').attr('value', Math.PI * (-1));
+                        $('#numVmax').attr('value', Math.PI);
+                        break;
+                    case 'cosine':
+                        $('#numUmin').attr('value', Math.PI * (-1));
+                        $('#numUmax').attr('value', Math.PI);
+                        $('#numVmin').attr('value', Math.PI * (-1));
+                        $('#numVmax').attr('value', Math.PI);
+                        break;
+                    case 'funnel':
+                        $('#numUmin').attr('value', 0.1);
+                        $('#numUmax').attr('value', 2);
+                        $('#numVmin').attr('value', 0);
+                        $('#numVmax').attr('value', (Math.PI * 2));
+                        break;
+                }
             });
 
             /**

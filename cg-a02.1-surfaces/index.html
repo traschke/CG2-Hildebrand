@@ -32,7 +32,6 @@
 
         <button id="btnRandom"   type="button"   >Random</button>
         <button id="btnBand" type="button"   >Band</button>
-        <button id="btnEllipsoid" type="button"   >Ellipsoid</button>
         <button id="btnParametric" type="button"   >Parametric</button>
 
         <!-- add more here... -->
@@ -63,7 +62,17 @@
                 <td><button id="btnNewBand"   type="button"   >Create Band</button></td>
             </tr>
         </table>
-        <table id="ellipsoid">
+        <table id="parametric">
+            <tr>
+                <td>Surface</td>
+                <td>
+                    <select id="selParametricSurface">
+                        <option value="ellipsoid">Ellipsoid</option>
+                        <option value="cosine">Cosine</option>
+                        <option value="funnel">Funnel</option>
+                    </select>
+                </td>
+            </tr>
             <tr>
                 <td>Umin</td>
                 <td><input id="numUmin" class="objParam" type="number" min="1" max="10000" value="0"></td>
@@ -101,7 +110,7 @@
                 <td><input id="numC" class="objParam" type="number" min="1" max="10000" value="125"></td>
             </tr>
             <tr>
-                <td><button id="btnNewEllipsoid" type="button">Create Ellipsoid</button></td>
+                <td><button id="btnNewParametric" type="button">Create Parametric</button></td>
             </tr>
         </table>
         <label for="chkAnimationX">Animation X</label>
