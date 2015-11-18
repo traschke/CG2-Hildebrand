@@ -63,14 +63,56 @@
                 <td><button id="btnNewBand"   type="button"   >Create Band</button></td>
             </tr>
         </table>
-        <label for="chkAnimation">Animation</label>
-        <input type="checkbox" id="chkAnimation">
+        <table id="ellipsoid">
+            <tr>
+                <td>Umin</td>
+                <td><input id="numUmin" class="objParam" type="number" min="1" max="10000" value="0"></td>
+            </tr>
+            <tr>
+                <td>Umax</td>
+                <td><input id="numUmax" class="objParam" type="number" min="1" max="10000" value="1000"></td>
+            </tr>
+            <tr>
+                <td>Vmin</td>
+                <td><input id="numVmin" class="objParam" type="number" min="1" max="10000" value="0"></td>
+            </tr>
+            <tr>
+                <td>Vmax</td>
+                <td><input id="numVmax" class="objParam" type="number" min="1" max="10000" value="1000"></td>
+            </tr>
+            <tr>
+                <td>Segments U</td>
+                <td><input id="numUSegments" class="objParam" type="number" min="1" max="10000" value="100"></td>
+            </tr>
+            <tr>
+                <td>Segments V</td>
+                <td><input id="numVSegments" class="objParam" type="number" min="1" max="10000" value="100"></td>
+            </tr>
+            <tr>
+                <td>a</td>
+                <td><input id="numA" class="objParam" type="number" min="1" max="10000" value="500"></td>
+            </tr>
+            <tr>
+                <td>b</td>
+                <td><input id="numB" class="objParam" type="number" min="1" max="10000" value="250"></td>
+            </tr>
+            <tr>
+                <td>c</td>
+                <td><input id="numC" class="objParam" type="number" min="1" max="10000" value="125"></td>
+            </tr>
+            <tr>
+                <td><button id="btnNewEllipsoid" type="button">Create Ellipsoid</button></td>
+            </tr>
+        </table>
+        <label for="chkAnimationX">Animation X</label>
+        <input type="checkbox" id="chkAnimationX">
 
+        <label for="chkAnimationX">Animation Y</label>
+        <input type="checkbox" id="chkAnimationY">
+
+        <label for="chkAnimationX">Animation Z</label>
+        <input type="checkbox" id="chkAnimationZ">
     </div>
-
-
-
   </div>
-
 </body>
 </html>

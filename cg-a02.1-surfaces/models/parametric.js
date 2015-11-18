@@ -21,20 +21,53 @@ define(["three"],
             var uSegments = config.uSegments;
             var vSegments = config.vSegments;
 
-            this.positions = new Float32Array(uSegments * vSegments);
-            this.colors = new Float32Array(uSegments * vSegments);
+            /**
+             * Size of a piece.
+             * @type {number}
+             */
+            var du = (umax - umin) / uSegments;
+
+            /**
+             * Size of a piece.
+             * @type {number}
+             */
+            var dv = (vmax - vmin) / vSegments;
+
+            /**
+             * Array with positions.
+             * @type {Float32Array}
+             */
+            this.positions = new Float32Array((uSegments + 1) * (vSegments + 1) * 3);
+
+            /**
+             * Array with colors.
+             * @type {Float32Array}
+             */
+            this.colors = new Float32Array((uSegments + 1) * (vSegments + 1) * 3);
 
             var color = new THREE.Color();
 
-            for (var i = 0; i < uSegments; i++) {
-                var u = Math.floor(((umax - umin) / uSegments) * i);
-                for (var j = 0; j < vSegments; j++) {
-                    var v = Math.floor(((vmax - vmin) / uSegments) * j);
-                    var x = Math.sin(u) * Math.sin(v);
-                    var y = Math.cos(u) * Math.sin(v);
-                    var z = Math.cos(v);
-                    var position = [x, y, z];
-                    this.positions[i * j] = position;
+            var counter = 0;
+            for (var i = 0; i <= uSegments; i++) {
+                var u = umin + (i * du);
+                for (var j = 0; j <= vSegments; j++) {
+                    var v = vmin + (j * dv);
+
+                    var xyz = posFunc(u, v);
+
+                    var x = xyz[0];
+                    var y = xyz[1];
+                    var z = xyz[2];
+
+                    this.positions[counter] = x;
+                    this.positions[counter + 1] = y;
+                    this.positions[counter + 2] = z;
+
+                    color.setRGB(1, 0, 0);
+                    this.colors[counter]     = color.r;
+                    this.colors[counter + 1] = color.g;
+                    this.colors[counter + 2] = color.b;
+                    counter = counter + 3;
                 }
             }
 
