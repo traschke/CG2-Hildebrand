@@ -11,8 +11,8 @@
 
 
 /* requireJS module definition */
-define(["jquery", "BufferGeometry", "random", "band"],
-    (function($,BufferGeometry, Random, Band) {
+define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'funnel'],
+    (function($,BufferGeometry, Random, Band, Ellipsoid, Cosine, Funnel) {
         "use strict";
 
         /*
@@ -26,23 +26,39 @@ define(["jquery", "BufferGeometry", "random", "band"],
              */
             this.animationInterval;
 
-            var rotate = function(value) {
+            var rotateX = function(value) {
+                scene.currentMesh.rotation.x += value;
+            };
+
+            var rotateY = function(value) {
                 scene.currentMesh.rotation.y += value;
             };
 
+            var rotateZ = function(value) {
+                scene.currentMesh.rotation.z += value;
+            };
 
             $("#random").show();
             $("#band").hide();
+            $('#parametric').hide();
 
             $("#btnRandom").click( (function() {
                 $("#random").show();
                 $("#band").hide();
+                $('#parametric').hide();
             }));
 
             $("#btnBand").click( (function() {
                 $("#random").hide();
                 $("#band").show();
+                $('#parametric').hide();
             }));
+
+            $('#btnParametric').click(function() {
+                $("#random").hide();
+                $("#band").hide();
+                $('#parametric').show();
+            });
 
             $("#btnNewRandom").click( (function() {
 
@@ -73,15 +89,94 @@ define(["jquery", "BufferGeometry", "random", "band"],
                 scene.addBufferGeometry(bufferGeometryBand);
             }));
 
+            $('#btnNewParametric').click(function() {
+                var config = {
+                    umin : parseInt($('#numUmin').attr('value')),
+                    umax : parseInt($('#numUmax').attr('value')),
+                    vmin : parseInt($('#numVmin').attr('value')),
+                    vmax : parseInt($('#numVmax').attr('value')),
+                    uSegments : parseInt($('#numUSegments').attr('value')),
+                    vSegments : parseInt($('#numVSegments').attr('value'))
+                };
+
+                var a = parseInt($('#numA').attr('value'));
+                var b = parseInt($('#numB').attr('value'));
+                var c = parseInt($('#numC').attr('value'));
+
+                var geometry = undefined;
+
+                switch ($('#selParametricSurface').val()) {
+                    case 'ellipsoid':
+                        geometry = new Ellipsoid(a, b, c, config);
+                        break;
+                    case 'cosine':
+                        geometry = new Cosine(a, b, c, config);
+                        break;
+                    case 'funnel':
+                        geometry = new Funnel(a, b, c, config);
+                        break;
+                }
+
+                var bufferGeometry = new BufferGeometry();
+                bufferGeometry.addAttribute('position', geometry.getPositions());
+                bufferGeometry.addAttribute('color', geometry.getColors());
+
+                scene.addBufferGeometry(bufferGeometry);
+            });
+
+            $('#selParametricSurface').change(function() {
+                console.log('Para changed!', this.value);
+                switch (this.value) {
+                    case 'ellipsoid':
+                        $('#numUmin').attr('value', Math.PI * (-1));
+                        $('#numUmax').attr('value', Math.PI);
+                        $('#numVmin').attr('value', Math.PI * (-1));
+                        $('#numVmax').attr('value', Math.PI);
+                        break;
+                    case 'cosine':
+                        $('#numUmin').attr('value', Math.PI * (-1));
+                        $('#numUmax').attr('value', Math.PI);
+                        $('#numVmin').attr('value', Math.PI * (-1));
+                        $('#numVmax').attr('value', Math.PI);
+                        break;
+                    case 'funnel':
+                        $('#numUmin').attr('value', 0.1);
+                        $('#numUmax').attr('value', 2);
+                        $('#numVmin').attr('value', 0);
+                        $('#numVmax').attr('value', (Math.PI * 2));
+                        break;
+                }
+            });
+
             /**
              * Handler for animation checkbox.
              */
-            $('#chkAnimation').change(function() {
+            $('#chkAnimationX').change(function() {
                 if ($(this).is(':checked')) {
-                    console.log('Animation started!');
-                    this.animationInterval = setInterval(rotate, 20, -0.01);
+                    console.log('Animation X started!');
+                    this.animationInterval = setInterval(rotateX, 20, -0.01);
                 } else {
-                    console.log('Animation stoppped!');
+                    console.log('Animation X stoppped!');
+                    clearInterval(this.animationInterval);
+                }
+            });
+
+            $('#chkAnimationY').change(function() {
+                if ($(this).is(':checked')) {
+                    console.log('Animation Y started!');
+                    this.animationInterval = setInterval(rotateY, 20, -0.01);
+                } else {
+                    console.log('Animation Y stoppped!');
+                    clearInterval(this.animationInterval);
+                }
+            });
+
+            $('#chkAnimationZ').change(function() {
+                if ($(this).is(':checked')) {
+                    console.log('Animation Z started!');
+                    this.animationInterval = setInterval(rotateZ, 20, -0.01);
+                } else {
+                    console.log('Animation Z stoppped!');
                     clearInterval(this.animationInterval);
                 }
             });
