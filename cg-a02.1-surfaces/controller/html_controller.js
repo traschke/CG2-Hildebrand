@@ -91,17 +91,17 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
 
             $('#btnNewParametric').click(function() {
                 var config = {
-                    umin : parseInt($('#numUmin').attr('value')),
-                    umax : parseInt($('#numUmax').attr('value')),
-                    vmin : parseInt($('#numVmin').attr('value')),
-                    vmax : parseInt($('#numVmax').attr('value')),
-                    uSegments : parseInt($('#numUSegments').attr('value')),
-                    vSegments : parseInt($('#numVSegments').attr('value'))
+                    umin : parseFloat($('#numUmin').attr('value').replace( /,/,"." )),
+                    umax : parseFloat($('#numUmax').attr('value').replace( /,/,"." )),
+                    vmin : parseFloat($('#numVmin').attr('value').replace( /,/,"." )),
+                    vmax : parseFloat($('#numVmax').attr('value').replace( /,/,"." )),
+                    uSegments : parseFloat($('#numUSegments').attr('value').replace( /,/,"." )),
+                    vSegments : parseFloat($('#numVSegments').attr('value').replace( /,/,"." ))
                 };
 
-                var a = parseInt($('#numA').attr('value'));
-                var b = parseInt($('#numB').attr('value'));
-                var c = parseInt($('#numC').attr('value'));
+                var a = parseFloat($('#numA').attr('value').replace( /,/,"." ));
+                var b = parseFloat($('#numB').attr('value').replace( /,/,"." ));
+                var c = parseFloat($('#numC').attr('value').replace( /,/,"." ));
 
                 var geometry = undefined;
 
