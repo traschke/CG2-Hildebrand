@@ -25,11 +25,20 @@ define(["three"],
 
             this.mesh     = undefined;
             this.geometry = new THREE.BufferGeometry();
+
             this.material = new THREE.PointsMaterial( {
                 color: 0xaaaaaa,
                 size: 10, vertexColors: THREE.VertexColors,
                 side: THREE.DoubleSide
             } );
+
+            this.wireframeMaterial = new THREE.MeshBasicMaterial({
+                color: 0x000000,
+                wireframe: true,
+                // Due to limitations in the ANGLE layer, on Windows platforms linewidth will always be 1 regardless of the set value.
+                wireframeLinewidth: 1
+            });
+
 
             /**
              * Adds a vertex attribute, we assume each element has three components, e.g.
@@ -44,7 +53,8 @@ define(["three"],
                 this.geometry.computeBoundingSphere();
 
                 //this.mesh = new THREE.Points( this.geometry, this.material );
-                this.mesh = new THREE.Mesh(this.geometry, this.material);
+                //this.mesh = new THREE.Mesh(this.geometry, this.meshMaterial);
+                this.mesh = THREE.SceneUtils.createMultiMaterialObject(this.geometry, [this.material, this.wireframeMaterial]);
             };
 
             this.getMesh = function() {
