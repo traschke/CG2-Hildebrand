@@ -25,6 +25,11 @@ define(["three"],
 
             this.positions = new Float32Array( items * 3);
             this.colors = new Float32Array( items * 3 );
+            this.indices = new Uint32Array(items);
+
+            for (var i = 0; i < this.indices.length; i++) {
+                this.indices[i] = i;
+            }
 
             var color = new THREE.Color();
 
@@ -66,6 +71,10 @@ define(["three"],
             this.getColors = function() {
                 return this.colors;
             };
+
+            this.getIndices = function() {
+                return this.indices;
+            }
 
         };
 

@@ -21,6 +21,8 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
          */
         var HtmlController = function(scene) {
 
+            var mesh;
+
             /**
              * The interval that handles the animation.
              */
@@ -65,6 +67,7 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
                 var numPoints = parseInt($("#numItems").attr("value"));
                 var random = new Random(numPoints);
                 var bufferGeometryRandom = new BufferGeometry();
+                bufferGeometryRandom.setIndex(random.getIndices());
                 bufferGeometryRandom.addAttribute("position", random.getPositions());
                 bufferGeometryRandom.addAttribute("color", random.getColors());
 
@@ -83,6 +86,7 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
 
                 var band = new Band(config);
                 var bufferGeometryBand = new BufferGeometry();
+                bufferGeometryBand.setIndex(band.getIndices());
                 bufferGeometryBand.addAttribute("position", band.getPositions());
                 bufferGeometryBand.addAttribute("color", band.getColors());
 

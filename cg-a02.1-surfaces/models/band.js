@@ -27,13 +27,39 @@ define(["three"],
 
             this.positions = new Float32Array( 2*segments * 3);
             this.colors = new Float32Array( 2*segments * 3 );
+            this.indices = new Uint32Array(2 * segments * 3);
+
+            // Initialize indices
+            this.indices[0] = 0;
+            this.indices[1] = 1;
+            this.indices[2] = 3;
+            this.indices[3] = 0;
+            this.indices[4] = 3;
+            this.indices[5] = 2
+
+            var i;
+            for (i = 6; i < this.indices.length - 6; i += 6) {
+                this.indices[i] = this.indices[i - 6] + 2;
+                this.indices[i + 1] = this.indices[i - 5] + 2;
+                this.indices[i + 2] = this.indices[i - 4] + 2;
+                this.indices[i + 3] = this.indices[i - 3] + 2;
+                this.indices[i + 4] = this.indices[i - 2] + 2;
+                this.indices[i + 5] = this.indices[i - 1] + 2;
+            }
+
+            this.indices[i] = this.indices[i - 6] + 2;
+            this.indices[i + 1] = this.indices[i - 5] + 2;
+            this.indices[i + 2] = this.indices[1];
+            this.indices[i + 3] = this.indices[i - 3] + 2;
+            this.indices[i + 4] = this.indices[1];
+            this.indices[i + 5] = this.indices[0];
 
             var color = new THREE.Color();
 
             for(var i=0; i<this.positions.length; i+=6) {
 
                 // X and Z coordinates are on a circle around the origin
-                var t = (i/segments)*Math.PI*2;
+                var t = (i / this.positions.length) * Math.PI * 2;
                 var x = Math.sin(t) * radius;
                 var z = Math.cos(t) * radius;
                 // Y coordinates are simply -height/2 and +height/2
@@ -70,6 +96,10 @@ define(["three"],
             this.getColors = function() {
                 return this.colors;
             };
+
+            this.getIndices = function() {
+                return this.indices;
+            }
 
         };
 

@@ -27,7 +27,8 @@ define(["three"],
             this.geometry = new THREE.BufferGeometry();
             this.material = new THREE.PointsMaterial( {
                 color: 0xaaaaaa,
-                size: 10, vertexColors: THREE.VertexColors
+                size: 10, vertexColors: THREE.VertexColors,
+                side: THREE.DoubleSide
             } );
 
             /**
@@ -42,11 +43,16 @@ define(["three"],
                 this.geometry.addAttribute( name, new THREE.BufferAttribute( buffer, 3 ) );
                 this.geometry.computeBoundingSphere();
 
-                this.mesh = new THREE.Points( this.geometry, this.material );
-            }
+                //this.mesh = new THREE.Points( this.geometry, this.material );
+                this.mesh = new THREE.Mesh(this.geometry, this.material);
+            };
 
             this.getMesh = function() {
                 return this.mesh;
+            };
+
+            this.setIndex = function (indices) {
+                this.geometry.setIndex(new THREE.BufferAttribute(indices, 1));
             }
         };
 
