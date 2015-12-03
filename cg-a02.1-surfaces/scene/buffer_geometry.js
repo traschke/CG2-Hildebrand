@@ -21,16 +21,22 @@ define(["three"],
 
         "use strict";
 
-        var BufferGeometry = function () {
+        var BufferGeometry = function (renderMesh, renderWireframe, renderPoints) {
 
             this.mesh     = undefined;
             this.geometry = new THREE.BufferGeometry();
 
-            this.material = new THREE.PointsMaterial( {
+            this.pointsMaterial = new THREE.PointsMaterial( {
                 color: 0xaaaaaa,
                 size: 10, vertexColors: THREE.VertexColors,
                 side: THREE.DoubleSide
-            } );
+            });
+
+            this.meshMaterial = new THREE.MeshBasicMaterial( {
+                /*color: 0xaaaaaa,*/
+                vertexColors: THREE.VertexColors,
+                side: THREE.DoubleSide
+            });
 
             this.wireframeMaterial = new THREE.MeshBasicMaterial({
                 color: 0x000000,
@@ -39,6 +45,16 @@ define(["three"],
                 wireframeLinewidth: 1
             });
 
+            this.materials = [];
+            if (renderMesh) {
+                this.materials.push(this.meshMaterial);
+            }
+            if(renderWireframe) {
+                this.materials.push(this.wireframeMaterial);
+            }
+            if (renderPoints) {
+                this.materials.push(this.pointsMaterial);
+            }
 
             /**
              * Adds a vertex attribute, we assume each element has three components, e.g.
@@ -51,10 +67,12 @@ define(["three"],
             this.addAttribute = function(name, buffer) {
                 this.geometry.addAttribute( name, new THREE.BufferAttribute( buffer, 3 ) );
                 this.geometry.computeBoundingSphere();
+                if (renderPoints) {
+                    this.mesh = new THREE.Points(this.geometry, this.pointsMaterial);
+                } else {
+                    this.mesh = THREE.SceneUtils.createMultiMaterialObject(this.geometry, this.materials);
+                }
 
-                //this.mesh = new THREE.Points( this.geometry, this.material );
-                //this.mesh = new THREE.Mesh(this.geometry, this.meshMaterial);
-                this.mesh = THREE.SceneUtils.createMultiMaterialObject(this.geometry, [this.material, this.wireframeMaterial]);
             };
 
             this.getMesh = function() {

@@ -64,9 +64,13 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
 
             $("#btnNewRandom").click( (function() {
 
+                var renderMesh = $('#chkSolid').is(':checked');
+                var renderWireframe = $('#chkWireframe').is(':checked');
+                var renderPoints = $('#chkPoints').is(':checked');
+
                 var numPoints = parseInt($("#numItems").attr("value"));
                 var random = new Random(numPoints);
-                var bufferGeometryRandom = new BufferGeometry();
+                var bufferGeometryRandom = new BufferGeometry(renderMesh, renderWireframe, renderPoints);
                 bufferGeometryRandom.setIndex(random.getIndices());
                 bufferGeometryRandom.addAttribute("position", random.getPositions());
                 bufferGeometryRandom.addAttribute("color", random.getColors());
@@ -83,9 +87,12 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
                     height : parseInt($("#height").attr("value"))
                 };
 
+                var renderMesh = $('#chkSolid').is(':checked');
+                var renderWireframe = $('#chkWireframe').is(':checked');
+                var renderPoints = $('#chkPoints').is(':checked');
 
                 var band = new Band(config);
-                var bufferGeometryBand = new BufferGeometry();
+                var bufferGeometryBand = new BufferGeometry(renderMesh, renderWireframe, renderPoints);
                 bufferGeometryBand.setIndex(band.getIndices());
                 bufferGeometryBand.addAttribute("position", band.getPositions());
                 bufferGeometryBand.addAttribute("color", band.getColors());
@@ -121,7 +128,11 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
                         break;
                 }
 
-                var bufferGeometry = new BufferGeometry();
+                var renderMesh = $('#chkSolid').is(':checked');
+                var renderWireframe = $('#chkWireframe').is(':checked');
+                var renderPoints = $('#chkPoints').is(':checked');
+
+                var bufferGeometry = new BufferGeometry(renderMesh, renderWireframe, renderPoints);
                 bufferGeometry.addAttribute('position', geometry.getPositions());
                 bufferGeometry.addAttribute('color', geometry.getColors());
 

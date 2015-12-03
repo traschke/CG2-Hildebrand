@@ -13,7 +13,6 @@ define(["three"],
         "use strict";
 
         var ParametricSurface = function (posFunc, config) {
-
             var umin = config.umin;
             var umax = config.umax;
             var vmin = config.vmin;
@@ -39,6 +38,8 @@ define(["three"],
              */
             this.positions = new Float32Array((uSegments + 1) * (vSegments + 1) * 3);
 
+            this.indices = new Uint32Array((uSegments + 1) * (vSegments + 1) * 2 * 3);
+
             /**
              * Array with colors.
              * @type {Float32Array}
@@ -47,6 +48,7 @@ define(["three"],
 
             var color = new THREE.Color();
 
+            //Calculate positions
             var counter = 0;
             for (var i = 0; i <= uSegments; i++) {
                 var u = umin + (i * du);
@@ -70,6 +72,12 @@ define(["three"],
                     counter = counter + 3;
                 }
             }
+
+            // Calculate indices
+            for (var i = 0; i < this.indices.length; i++) {
+                this.indices[i];
+            }
+
 
             this.getPositions = function() {
                 return this.positions;

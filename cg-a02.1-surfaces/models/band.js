@@ -35,7 +35,7 @@ define(["three"],
             this.indices[2] = 3;
             this.indices[3] = 0;
             this.indices[4] = 3;
-            this.indices[5] = 2
+            this.indices[5] = 2;
 
             var i;
             for (i = 6; i < this.indices.length - 6; i += 6) {
