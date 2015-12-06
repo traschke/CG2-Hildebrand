@@ -36,6 +36,10 @@ define(["three", 'parametric'],
                 return this.colors;
             };
 
+            this.getIndices = function() {
+                return parametricSurface.getIndices();
+            }
+
         };
 
         return Ellipsoid;

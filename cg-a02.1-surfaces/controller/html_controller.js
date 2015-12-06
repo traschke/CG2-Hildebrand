@@ -133,6 +133,7 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
                 var renderPoints = $('#chkPoints').is(':checked');
 
                 var bufferGeometry = new BufferGeometry(renderMesh, renderWireframe, renderPoints);
+                bufferGeometry.setIndex(geometry.getIndices());
                 bufferGeometry.addAttribute('position', geometry.getPositions());
                 bufferGeometry.addAttribute('color', geometry.getColors());
 
