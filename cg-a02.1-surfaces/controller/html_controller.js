@@ -11,8 +11,8 @@
 
 
 /* requireJS module definition */
-define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'funnel'],
-    (function($,BufferGeometry, Random, Band, Ellipsoid, Cosine, Funnel) {
+define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'funnel', 'robot'],
+    (function($,BufferGeometry, Random, Band, Ellipsoid, Cosine, Funnel, Robot) {
         "use strict";
 
         /*
@@ -98,6 +98,11 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
                 bufferGeometryBand.addAttribute("color", band.getColors());
 
                 scene.addBufferGeometry(bufferGeometryBand);
+            }));
+
+            $("#btnRobot").click( (function() {
+                var robot = new Robot();
+                scene.addBufferGeometry(robot) ;
             }));
 
             $('#btnNewParametric').click(function() {

@@ -100,9 +100,9 @@ define(["three"],
             this.getIndices = function() {
                 return this.indices;
             }
-
         };
 
         return Band;
     }));
+
     

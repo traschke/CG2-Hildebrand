@@ -31,7 +31,8 @@ requirejs.config({
         "util"  : "./utils/util",
         "shaders" : "./shaders",
         "BufferGeometry" : "./scene/buffer_geometry",
-        "HtmlController": "./controller/html_controller"
+        "HtmlController": "./controller/html_controller",
+        "robot" : "./models/robot"
 
     },
     shim: {

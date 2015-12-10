@@ -12,8 +12,8 @@
 
 
 /* requireJS module definition */
-define(["three", "util", "shaders", "BufferGeometry", "random", "band"],
-    (function(THREE, util, shaders, BufferGeometry, Random, Band) {
+define(["three", "util", "shaders", "BufferGeometry", "random", "band", "robot"],
+    (function(THREE, util, shaders, BufferGeometry, Random, Band, Robot) {
 
         "use strict";
 
@@ -66,6 +66,7 @@ define(["three", "util", "shaders", "BufferGeometry", "random", "band"],
                 scope.scene.add( scope.currentMesh );
 
             }
+
 
             /*
              * drawing the scene
