@@ -18,6 +18,9 @@ define(["three"],
 			var footSize =[100, 50, 65];
 			var kneeSize = [50, 50, 40, 32];
 			var ankleSize = [40, 40, 30, 32];
+			var shoulderSize = [50, 50, 30, 32];
+			var ellbowSize = [40, 40, 30, 32];
+			var handSize = [40, 40, 40];
 			this.root = new THREE.Object3D();
 
 			// skeleton
@@ -37,84 +40,108 @@ define(["three"],
 
 			this.knee1 = new THREE.Object3D();
 			this.knee1.name = "knee1";
-			this.knee1.translateY(-torsoSize[1]/2 - tightSize[1]);
-			this.knee1.translateX(torsoSize[0]/4);
+			this.knee1.translateY(-tightSize[1]/2);
 
 			this.knee2 = new THREE.Object3D();
 			this.knee2.name = "knee2";
-			this.knee2.translateY(-torsoSize[1]/2 - tightSize[1]);
-			this.knee2.translateX(-torsoSize[0]/4);
+			this.knee2.translateY(-tightSize[1]/2);
 
 			this.lowerleg1 = new THREE.Object3D();
 			this.lowerleg1.name = "lowerleg1";
-			this.lowerleg1.translateY(-torsoSize[1]/2 - tightSize[1] - lowerSize[1]/2);
-			this.lowerleg1.translateX(-torsoSize[0]/4);
+			this.lowerleg1.translateY(-lowerSize[1]/2);
 
 			this.lowerleg2 = new THREE.Object3D();
 			this.lowerleg2.name = "lowerleg2";
-			this.lowerleg2.translateY(-torsoSize[1]/2 - tightSize[1] - lowerSize[1]/2);
-			this.lowerleg2.translateX(torsoSize[0]/4);
+			this.lowerleg2.translateY(-lowerSize[1]/2);
 
 			this.ankle1 = new THREE.Object3D();
 			this.ankle1.name = "ankle1";
-			this.ankle1.translateY(-torsoSize[1]/2 - tightSize[1] - lowerSize[1]);
-			this.ankle1.translateX(-torsoSize[0]/4);
+			this.ankle1.translateY(-lowerSize[1]/2);
 
 			this.ankle2 = new THREE.Object3D();
 			this.ankle2.name = "ankle2";
-			this.ankle2.translateY(-torsoSize[1]/2 - tightSize[1] - lowerSize[1]);
-			this.ankle2.translateX(torsoSize[0]/4);
+			this.ankle2.translateY(-lowerSize[1]/2);
 
 			this.foot1 = new THREE.Object3D();
 			this.foot1.name = "foot1";
-			this.foot1.translateY(-torsoSize[1]/2 - tightSize[1] - lowerSize[1] - footSize[1]/2);
-			this.foot1.translateX(torsoSize[0]/4);
+			this.foot1.translateY(-footSize[1]/2);
 
 			this.foot2 = new THREE.Object3D();
 			this.foot2.name = "foot1";
-			this.foot2.translateY(-torsoSize[1]/2 - tightSize[1] - lowerSize[1] - footSize[1]/2);
-			this.foot2.translateX(-torsoSize[0]/4);
+			this.foot2.translateY(-footSize[1]/2);
 
 			this.tightarm1 = new THREE.Object3D();
 			this.tightarm1.name = "tightarm1";
-			this.tightarm1.translateY(torsoSize[1]/4);
-			this.tightarm1.translateX(-torsoSize[0]/2 - tightSize[0]/2);
+			this.tightarm1.translateY(-shoulderSize[1]);
+			this.tightarm1.translateX(-shoulderSize[1]);
 
 			this.tightarm2 = new THREE.Object3D();
 			this.tightarm2.name = "tightarm2";
-			this.tightarm2.translateY(torsoSize[1]/4);
-			this.tightarm2.translateX(torsoSize[0]/2 + tightSize[0]/2);
+			this.tightarm2.translateY(-shoulderSize[1]);
+			this.tightarm2.translateX(shoulderSize[1]);
+
 
 			this.lowerarm1 = new THREE.Object3D();
 			this.lowerarm1.name = "lowerarm1";
-			this.lowerarm1.translateY(torsoSize[1]/4 - lowerSize[1]);
-			this.lowerarm1.translateX(-torsoSize[0]/2 - tightSize[0]/2);
+			this.lowerarm1.translateY(- lowerSize[1]/2);
+
 
 			this.lowerarm2 = new THREE.Object3D();
 			this.lowerarm2.name = "lowerarm1";
-			this.lowerarm2.translateY(torsoSize[1]/4 - lowerSize[1]);
-			this.lowerarm2.translateX(torsoSize[0]/2 + tightSize[0]/2);
+			this.lowerarm2.translateY(- lowerSize[1]/2);
+
+			this.shoulder1 = new THREE.Object3D();
+			this.shoulder1.name = "shoulder1";
+			this.shoulder1.translateY(torsoSize[1]/4 + shoulderSize[1]/2);
+			this.shoulder1.translateX(-torsoSize[0]/2);
+
+			this.shoulder2 = new THREE.Object3D();
+			this.shoulder2.name = "shoulder2";
+			this.shoulder2.translateY(torsoSize[1]/4 + shoulderSize[1]/2);
+			this.shoulder2.translateX(torsoSize[0]/2);
+
+			this.ellbow1 = new THREE.Object3D();
+			this.ellbow1.name = "ellbow1";
+			this.ellbow1.translateY(-tightSize[1]/2);
+
+			this.ellbow2 = new THREE.Object3D();
+			this.ellbow2.name = "ellbow2";
+			this.ellbow2.translateY(-tightSize[1]/2);
+
+			this.hand1 = new THREE.Object3D();
+			this.hand1.name = "hand1";
+			this.hand1.translateY(-lowerSize[1]/2);
+
+			this.hand2 = new THREE.Object3D();
+			this.hand2.name = "hand2";
+			this.hand2.translateY(-lowerSize[1]/2);
 
 			this.torso = new THREE.Object3D();
 			this.torso.add(this.head);
 			this.torso.add(this.tightleg1);
 			this.torso.add(this.tightleg2);
-			this.torso.add(this.lowerleg1);
-			this.torso.add(this.lowerleg2);
-			this.torso.add(this.foot1);
-			this.torso.add(this.foot2);
-			this.torso.add(this.tightarm1);
-			this.torso.add(this.tightarm2);
-			this.torso.add(this.lowerarm1);
-			this.torso.add(this.lowerarm2);
-			this.torso.add(this.knee1);
-			this.torso.add(this.knee2);
-			this.torso.add(this.ankle1);
-			this.torso.add(this.ankle2);
+			this.knee1.add(this.lowerleg1);
+			this.knee2.add(this.lowerleg2);
+			this.ankle1.add(this.foot1);
+			this.ankle2.add(this.foot2);
+			this.shoulder1.add(this.tightarm1);
+			this.shoulder2.add(this.tightarm2);
+			this.ellbow1.add(this.lowerarm1);
+			this.ellbow2.add(this.lowerarm2);
+			this.tightleg1.add(this.knee1);
+			this.tightleg2.add(this.knee2);
+			this.lowerleg1.add(this.ankle1);
+			this.lowerleg2.add(this.ankle2);
+			this.torso.add(this.shoulder1);
+			this.torso.add(this.shoulder2);
+			this.tightarm1.add(this.ellbow1);
+			this.tightarm2.add(this.ellbow2);
+			this.lowerarm1.add(this.hand1);
+			this.lowerarm2.add(this.hand2);
 
 			// skin
 			this.headSkin = new THREE.Mesh( new THREE.CubeGeometry( headSize[0], headSize[1], headSize[2]) , new THREE.MeshNormalMaterial() ); 
-			this.headSkin.rotateY( 0,25 );
+			this.headSkin.rotateY( Math.PI/4 );
 
 			this.tightleg1Skin = new THREE.Mesh( new THREE.CubeGeometry( tightSize[0], tightSize[1], tightSize[2]) , new THREE.MeshNormalMaterial() ); 
 			this.tightleg2Skin = new THREE.Mesh( new THREE.CubeGeometry( tightSize[0], tightSize[1], tightSize[2]) , new THREE.MeshNormalMaterial() );
@@ -137,6 +164,17 @@ define(["three"],
 			this.ankle1Skin = new THREE.Mesh(new THREE.CylinderGeometry(ankleSize[0], ankleSize[1], ankleSize[2], ankleSize[3]), new THREE.MeshNormalMaterial());
 			this.ankle2Skin = new THREE.Mesh(new THREE.CylinderGeometry(ankleSize[0], ankleSize[1], ankleSize[2], ankleSize[3]), new THREE.MeshNormalMaterial());
 
+			this.shoulder1Skin = new THREE.Mesh(new THREE.CylinderGeometry(shoulderSize[0], shoulderSize[1], shoulderSize[2], shoulderSize[3]), new THREE.MeshNormalMaterial());
+			this.shoulder1Skin.rotateZ( Math.PI/2 );
+			this.shoulder2Skin = new THREE.Mesh(new THREE.CylinderGeometry(shoulderSize[0], shoulderSize[1], shoulderSize[2], shoulderSize[3]), new THREE.MeshNormalMaterial());
+			this.shoulder2Skin.rotateZ( Math.PI/2 );
+
+			this.ellbow1Skin = new THREE.Mesh(new THREE.CylinderGeometry(ellbowSize[0], ellbowSize[1], ellbowSize[2], ellbowSize[3]), new THREE.MeshNormalMaterial());
+			this.ellbow2Skin = new THREE.Mesh(new THREE.CylinderGeometry(ellbowSize[0], ellbowSize[1], ellbowSize[2], ellbowSize[3]), new THREE.MeshNormalMaterial());
+
+			this.hand1Skin = new THREE.Mesh(new THREE.SphereGeometry(handSize[0], handSize[1], handSize[2]), new THREE.MeshNormalMaterial());
+			this.hand2Skin = new THREE.Mesh(new THREE.SphereGeometry(handSize[0], handSize[1], handSize[2]), new THREE.MeshNormalMaterial());
+
 			this.torsoSkin = new THREE.Mesh( new THREE.CubeGeometry(torsoSize[0], torsoSize[1], torsoSize[2]), new THREE.MeshNormalMaterial() );
 
 			this.torso.add(this.torsoSkin);
@@ -155,6 +193,12 @@ define(["three"],
 			this.knee2.add(this.knee2Skin);
 			this.ankle1.add(this.ankle1Skin);
 			this.ankle2.add(this.ankle2Skin);
+			this.shoulder1.add(this.shoulder1Skin);
+			this.shoulder2.add(this.shoulder2Skin);
+			this.ellbow1.add(this.ellbow1Skin);
+			this.ellbow2.add(this.ellbow2Skin);
+			this.hand1.add(this.hand1Skin);
+			this.hand2.add(this.hand2Skin);
 
 			this.root.add(this.torso);
 

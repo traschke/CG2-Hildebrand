@@ -58,6 +58,13 @@ define(["three", "util", "shaders", "BufferGeometry", "random", "band", "robot"]
                     scope.currentMesh.rotation.y += -0.05;
                     // Cursor up
                 }
+                else if(keyCode == 72){
+                    var nodeHead = scope.scene.getObjectByName("head", true);
+                if ( nodeHead ) {
+                nodeHead.rotateY(Math.PI/16);
+                console.log("head rotation");
+                }
+                }
             };
 
             this.addBufferGeometry = function(bufferGeometry) {
