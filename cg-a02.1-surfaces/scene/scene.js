@@ -60,10 +60,21 @@ define(["three", "util", "shaders", "BufferGeometry", "random", "band", "robot"]
                 }
                 else if(keyCode == 72){
                     var nodeHead = scope.scene.getObjectByName("head", true);
-                if ( nodeHead ) {
-                nodeHead.rotateY(Math.PI/16);
-                console.log("head rotation");
+                    if ( nodeHead ) {
+                        nodeHead.rotateY(Math.PI/16);
+                    }
                 }
+                else if(keyCode == 68){
+                    var nodeshoulder1 = scope.scene.getObjectByName("shoulder1", true);
+                    if ( nodeshoulder1 ) {
+                        nodeshoulder1.rotateX(-Math.PI/16);
+                    }
+                }
+                else if(keyCode == 65){
+                    var nodeshoulder2 = scope.scene.getObjectByName("shoulder2", true);
+                    if ( nodeshoulder2 ) {
+                        nodeshoulder2.rotateX(-Math.PI/16);
+                    }
                 }
             };
 

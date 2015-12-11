@@ -21,6 +21,7 @@ define(["three"],
 			var shoulderSize = [50, 50, 30, 32];
 			var ellbowSize = [40, 40, 30, 32];
 			var handSize = [40, 40, 40];
+			var hipSize = [60, 60, 30, 32];
 			this.root = new THREE.Object3D();
 
 			// skeleton
@@ -30,13 +31,21 @@ define(["three"],
 
 			this.tightleg1 = new THREE.Object3D();
 			this.tightleg1.name = "tightleg1";
-			this.tightleg1.translateY(-torsoSize[1]/2 - tightSize[1]/2);
-			this.tightleg1.translateX(-torsoSize[0]/4);
+			this.tightleg1.translateY(- tightSize[1]/2);
 
 			this.tightleg2 = new THREE.Object3D();
 			this.tightleg2.name = "tightleg2";
-			this.tightleg2.translateY(-torsoSize[1]/2 - tightSize[1]/2);
-			this.tightleg2.translateX(torsoSize[0]/4);
+			this.tightleg2.translateY(- tightSize[1]/2);
+
+			this.hip1 = new THREE.Object3D();
+			this.hip1.name = "hip1";
+			this.hip1.translateY(-torsoSize[1]/2);
+			this.hip1.translateX(-torsoSize[0]/4);
+
+			this.hip2 = new THREE.Object3D();
+			this.hip2.name = "hip2";
+			this.hip2.translateY(-torsoSize[1]/2);
+			this.hip2.translateX(torsoSize[0]/4);
 
 			this.knee1 = new THREE.Object3D();
 			this.knee1.name = "knee1";
@@ -80,11 +89,9 @@ define(["three"],
 			this.tightarm2.translateY(-shoulderSize[1]);
 			this.tightarm2.translateX(shoulderSize[1]);
 
-
 			this.lowerarm1 = new THREE.Object3D();
 			this.lowerarm1.name = "lowerarm1";
 			this.lowerarm1.translateY(- lowerSize[1]/2);
-
 
 			this.lowerarm2 = new THREE.Object3D();
 			this.lowerarm2.name = "lowerarm1";
@@ -118,8 +125,10 @@ define(["three"],
 
 			this.torso = new THREE.Object3D();
 			this.torso.add(this.head);
-			this.torso.add(this.tightleg1);
-			this.torso.add(this.tightleg2);
+			this.hip1.add(this.tightleg1);
+			this.hip2.add(this.tightleg2);
+			this.torso.add(this.hip1);
+			this.torso.add(this.hip2);
 			this.knee1.add(this.lowerleg1);
 			this.knee2.add(this.lowerleg2);
 			this.ankle1.add(this.foot1);
@@ -175,6 +184,9 @@ define(["three"],
 			this.hand1Skin = new THREE.Mesh(new THREE.SphereGeometry(handSize[0], handSize[1], handSize[2]), new THREE.MeshNormalMaterial());
 			this.hand2Skin = new THREE.Mesh(new THREE.SphereGeometry(handSize[0], handSize[1], handSize[2]), new THREE.MeshNormalMaterial());
 
+			this.hip1Skin = new THREE.Mesh(new THREE.CylinderGeometry(hipSize[0], hipSize[1], hipSize[2], hipSize[3]), new THREE.MeshNormalMaterial());
+			this.hip2Skin = new THREE.Mesh(new THREE.CylinderGeometry(hipSize[0], hipSize[1], hipSize[2], hipSize[3]), new THREE.MeshNormalMaterial());
+
 			this.torsoSkin = new THREE.Mesh( new THREE.CubeGeometry(torsoSize[0], torsoSize[1], torsoSize[2]), new THREE.MeshNormalMaterial() );
 
 			this.torso.add(this.torsoSkin);
@@ -199,6 +211,8 @@ define(["three"],
 			this.ellbow2.add(this.ellbow2Skin);
 			this.hand1.add(this.hand1Skin);
 			this.hand2.add(this.hand2Skin);
+			this.hip1.add(this.hip1Skin);
+			this.hip2.add(this.hip2Skin);
 
 			this.root.add(this.torso);
 
