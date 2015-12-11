@@ -76,6 +76,26 @@ define(["three", "util", "shaders", "BufferGeometry", "random", "band", "robot"]
                         nodeshoulder2.rotateX(-Math.PI/16);
                     }
                 }
+                else if(keyCode == 83){
+                    var nodehip1 = scope.scene.getObjectByName("hip1", true);
+                    var nodeknee1 = scope.scene.getObjectByName("knee1", true);
+                    if ( nodehip1 ) {
+                        nodehip1.rotateX(-Math.PI/16);
+                    }
+                    if ( nodeknee1 ) {
+                        nodeknee1.rotateX(Math.PI/16);
+                    }
+                }
+                else if(keyCode == 87){
+                    var nodehip1 = scope.scene.getObjectByName("hip1", true);
+                    var nodeknee1 = scope.scene.getObjectByName("knee1", true);
+                    if ( nodehip1 ) {
+                        nodehip1.rotateX(Math.PI/16);
+                    }
+                    if ( nodeknee1 ) {
+                        nodeknee1.rotateX(-Math.PI/16);
+                    }
+                }
             };
 
             this.addBufferGeometry = function(bufferGeometry) {
