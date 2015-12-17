@@ -1,6 +1,6 @@
 /* requireJS module definition */
-define(["three"],
-    (function(THREE) {
+define(["three", 'ellipsoid', "BufferGeometry"],
+    (function(THREE, Ellipsoid, BufferGeometry) {
 
         "use strict";
 
@@ -11,7 +11,7 @@ define(["three"],
          */
         var Robot = function () {
 
-			var headSize = [130 ,130 ,130]; 
+			var headSize = [75 ,75, 75];
 			var torsoSize = [250 ,400 ,150];
 			var tightSize = [80, 150, 80];
 			var lowerSize = [65, 130, 65];
@@ -149,7 +149,30 @@ define(["three"],
 			this.lowerarm2.add(this.hand2);
 
 			// skin
-			this.headSkin = new THREE.Mesh( new THREE.CubeGeometry( headSize[0], headSize[1], headSize[2]) , new THREE.MeshNormalMaterial() ); 
+			//this.headSkin = new THREE.Mesh( new THREE.CubeGeometry( headSize[0], headSize[1], headSize[2]) , new THREE.MeshNormalMaterial() );
+			var config = {
+				umin : parseFloat(0),
+				umax : parseFloat(1000),
+				vmin : parseFloat(0),
+				vmax : parseFloat(1000),
+				uSegments : parseFloat(100),
+				vSegments : parseFloat(100)
+			};
+
+			var ellip = new Ellipsoid(headSize[0], headSize[1], headSize[2], config);
+
+			var bufferGeometry = new BufferGeometry(false, false, false);
+			bufferGeometry.setIndex(ellip.getIndices());
+			bufferGeometry.addAttribute('position', ellip.getPositions());
+			bufferGeometry.addAttribute('color', ellip.getColors());
+
+			this.meshMaterial = new THREE.MeshBasicMaterial( {
+				vertexColors: THREE.VertexColors,
+				side: THREE.DoubleSide
+			});
+
+
+			this.headSkin = new THREE.Mesh(bufferGeometry.geometry, this.meshMaterial);
 			this.headSkin.rotateY( Math.PI/4 );
 
 			this.tightleg1Skin = new THREE.Mesh( new THREE.CubeGeometry( tightSize[0], tightSize[1], tightSize[2]) , new THREE.MeshNormalMaterial() ); 
