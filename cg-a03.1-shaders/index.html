@@ -33,7 +33,9 @@
         <button id="btnRandom"   type="button"   >Random</button>
         <button id="btnBand" type="button"   >Band</button>
         <button id="btnParametric" type="button"   >Parametric</button>
-        <button id="btnRobot" type="button"   >Create Robot</button>
+        <button id="btnRobot" type="button"   >Robot</button>
+        <button id="btnPlanet" type="button">Planet</button>
+        <button id="btnExplosion" type="button">Explosion</button>
 
         <!-- add more here... -->
         <h3>Selected Object:</h3>
@@ -121,6 +123,44 @@
             </tr>
             <tr>
                 <td><button id="btnNewParametric" type="button">Create Parametric</button></td>
+            </tr>
+        </table>
+        <table id="planet">
+            <tr>
+                <td>Animation of sun</td>
+                <td><input type="checkbox" id="chkPlanetSunAnimation"></td>
+            </tr>
+            <tr>
+                <td>Day texture</td>
+                <td><input type="checkbox" id="chkPlanetDayTexture"></td>
+            </tr>
+            <tr>
+                <td>Night texture</td>
+                <td><input type="checkbox" id="chkPlanetNightTexture"></td>
+            </tr>
+            <tr>
+                <td>Clouds</td>
+                <td><input type="checkbox" id="chkPlanetCloudsTexture"></td>
+            </tr>
+            <tr>
+                <td><button type="button" id="btnNewPlanet">Create planet</button></td>
+            </tr>
+        </table>
+        <table id="explosion">
+            <tr>
+                <td>Frequency Scale:</td>
+                <td><input type="number" id="nmbExplosionFrequencyScale" value="0.5"></td>
+            </tr>
+            <tr>
+                <td>Color Scale:</td>
+                <td><input type="number" id="nmbExplosionColorScale" value="1.3"></td>
+            </tr>
+            <tr>
+                <td>Weight:</td>
+                <td><input type="number" id="nmbExplosionWeight" value="200"></td>
+            </tr>
+            <tr>
+                <td><button type="button" id="btnNewExplosion">Create explosion</button></td>
             </tr>
         </table>
         <label for="chkAnimationX">Animation X</label>

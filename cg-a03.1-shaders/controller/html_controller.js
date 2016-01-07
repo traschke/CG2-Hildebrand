@@ -43,23 +43,47 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
             $("#random").show();
             $("#band").hide();
             $('#parametric').hide();
+            $('#planet').hide();
+            $('#explosion').hide();
 
             $("#btnRandom").click( (function() {
                 $("#random").show();
                 $("#band").hide();
                 $('#parametric').hide();
+                $('#planet').hide();
+                $('#explosion').hide();
             }));
 
             $("#btnBand").click( (function() {
                 $("#random").hide();
                 $("#band").show();
                 $('#parametric').hide();
+                $('#planet').hide();
+                $('#explosion').hide();
             }));
 
             $('#btnParametric').click(function() {
                 $("#random").hide();
                 $("#band").hide();
                 $('#parametric').show();
+                $('#planet').hide();
+                $('#explosion').hide();
+            });
+
+            $('#btnPlanet').click(function() {
+                $("#random").hide();
+                $("#band").hide();
+                $('#parametric').hide();
+                $('#planet').show();
+                $('#explosion').hide();
+            });
+
+            $('#btnExplosion').click(function() {
+                $("#random").hide();
+                $("#band").hide();
+                $('#parametric').hide();
+                $('#planet').hide();
+                $('#explosion').show();
             });
 
             $("#btnNewRandom").click( (function() {
@@ -167,6 +191,19 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
                         $('#numVmax').attr('value', (Math.PI * 2));
                         break;
                 }
+            });
+
+            /**
+             * Handler for creating a new planet.
+             */
+            $('#btnNewPlanet').click(function() {
+                console.log("Creating a new planet...");
+               //TODO Implement
+            });
+
+            $('#btnNewExplosion').click(function() {
+               console.log("Creating new explosion...");
+                //TODO Implement
             });
 
             /**
