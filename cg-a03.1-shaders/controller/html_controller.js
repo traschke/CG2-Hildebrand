@@ -11,8 +11,8 @@
 
 
 /* requireJS module definition */
-define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'funnel', 'robot'],
-    (function($,BufferGeometry, Random, Band, Ellipsoid, Cosine, Funnel, Robot) {
+define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'funnel', 'robot', 'planet', 'explosion'],
+    (function($,BufferGeometry, Random, Band, Ellipsoid, Cosine, Funnel, Robot, Planet, Explosion) {
         "use strict";
 
         /*
