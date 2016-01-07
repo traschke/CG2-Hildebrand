@@ -199,6 +199,15 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
             $('#btnNewPlanet').click(function() {
                 console.log("Creating a new planet...");
                //TODO Implement
+               // var planet = new Planet();
+               // scene.addMesh(planet.getMesh());
+
+                var aLight = new THREE.AmbientLight('#FFFFFF');
+                var dLight = new THREE.DirectionalLight('#FFFFFF', 1);
+                dLight.name = "dLight";
+                dLight.position.set(-1, 0, -0.3).normalize();
+                scene.addLight(aLight);
+                scene.addLight(dLight);
             });
 
             $('#btnNewExplosion').click(function() {
@@ -238,8 +247,6 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
                     clearInterval(this.animationInterval);
                 }
             });
-
-
         };
 
         // return the constructor function
