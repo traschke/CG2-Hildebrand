@@ -18,7 +18,7 @@ define(["three", "shaders"],
             
             // hint:
             // texture can be assigned only when it is loaded completely, e.g. like this
-            material.uniforms.daytimeTexture.value   = textureName;
+            // material.uniforms.daytimeTexture.value   = textureName;
             
             scope.mesh = new THREE.Mesh( new THREE.SphereGeometry(400, 100,100), material );
             scope.mesh.name = "planet";

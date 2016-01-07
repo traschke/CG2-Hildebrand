@@ -199,8 +199,8 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
             $('#btnNewPlanet').click(function() {
                 console.log("Creating a new planet...");
                //TODO Implement
-               // var planet = new Planet();
-               // scene.addMesh(planet.getMesh());
+               var planet = new Planet();
+               scene.addMesh(planet.getMesh());
 
                 var aLight = new THREE.AmbientLight('#FFFFFF');
                 var dLight = new THREE.DirectionalLight('#FFFFFF', 1);
