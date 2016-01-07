@@ -15,12 +15,16 @@ define(["three", "shaders"],
 
             // implement ShaderMaterial using the code from
             // the lecture
+
+            var material = new THREE.ShaderMaterial( {
+                //TODO Implement
+            });
             
             // hint:
             // texture can be assigned only when it is loaded completely, e.g. like this
             // material.uniforms.daytimeTexture.value   = textureName;
             
-            scope.mesh = new THREE.Mesh( new THREE.SphereGeometry(400, 100,100), material );
+            scope.mesh = new THREE.Mesh( new THREE.SphereGeometry(400, 100,100), material);
             scope.mesh.name = "planet";
 
             scope.root.add(scope.mesh);
