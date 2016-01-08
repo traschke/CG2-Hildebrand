@@ -45,6 +45,7 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
             $('#parametric').hide();
             $('#planet').hide();
             $('#explosion').hide();
+            $('#material-options').show();
 
             $("#btnRandom").click( (function() {
                 $("#random").show();
@@ -52,6 +53,7 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
                 $('#parametric').hide();
                 $('#planet').hide();
                 $('#explosion').hide();
+                $('#material-options').show();
             }));
 
             $("#btnBand").click( (function() {
@@ -60,6 +62,7 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
                 $('#parametric').hide();
                 $('#planet').hide();
                 $('#explosion').hide();
+                $('#material-options').show();
             }));
 
             $('#btnParametric').click(function() {
@@ -68,6 +71,7 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
                 $('#parametric').show();
                 $('#planet').hide();
                 $('#explosion').hide();
+                $('#material-options').show();
             });
 
             $('#btnPlanet').click(function() {
@@ -76,6 +80,7 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
                 $('#parametric').hide();
                 $('#planet').show();
                 $('#explosion').hide();
+                $('#material-options').hide();
             });
 
             $('#btnExplosion').click(function() {
@@ -84,6 +89,7 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
                 $('#parametric').hide();
                 $('#planet').hide();
                 $('#explosion').show();
+                $('#material-options').hide();
             });
 
             $("#btnNewRandom").click( (function() {
