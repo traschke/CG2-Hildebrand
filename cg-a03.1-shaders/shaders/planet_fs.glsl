@@ -1,5 +1,8 @@
 precision mediump float;
 
+//THREE.js built-in
+//uniform mat4 viewMatrix;
+//uniform vec3 cameraPosition;
 
 // uniform lights (we only have the sun)
 uniform vec3 directionalLightColor[1];
@@ -8,6 +11,10 @@ uniform vec3 directionalLightDirection[1];
 uniform vec3 ambientLightColor[1];
 
 // uniform material constants k_a, k_d, k_s, alpha
+uniform vec3 diffuseMaterial;
+uniform vec3 specularMaterial;
+uniform vec3 ambientMaterial;
+uniform float shininessMaterial;
 
 // uniform sampler2D textures
 
@@ -18,8 +25,10 @@ uniform vec3 ambientLightColor[1];
 varying vec4 ecPosition;
 varying vec3 ecNormal;
 varying vec2 vUv;
+varying mat4 threeProjectionMatrix;
 
 
+/*
 void main() {
 
 
@@ -62,4 +71,34 @@ void main() {
 
     gl_FragColor = vec4(color, 1.0);
 
+*/
+
+vec3 phong(vec3 p, vec3 v, vec3 n, vec3 lightPos, vec3 lightColor) {
+    if(dot(v,n) < 0.0)
+        return vec3(0,0,0); // back-face
+
+    vec3 toLight = normalize(lightPos - p);
+    vec3 reflectLight = reflect(-toLight, n);
+
+    float ndots = max( dot(toLight,n), 0.0);
+    float rdotv = max( dot(reflectLight, v), 0.0);
+
+    vec3 ambi = ambientMaterial * ambientLightColor[0];
+    vec3 diff = diffuseMaterial * ndots * lightColor;
+    vec3 spec = specularMaterial * pow(rdotv, shininessMaterial) * lightColor;
+
+    return ambi + diff + spec;
+}
+
+void main() {
+    vec3 normalizedEcNormal = normalize(ecNormal);
+
+    bool useOtho = threeProjectionMatrix[2][3] == 0.0;
+
+    vec3 viewDirEc = useOtho ? vec3(0, 0, 1) : normalize(-ecPosition.xyz);
+
+    vec3 color = phong(ecPosition.xyz, normalizedEcNormal, viewDirEc, normalize(directionalLightDirection[0]), directionalLightColor[0]);
+    //vec3 color = phong(ecPosition.xyz, normalizedEcNormal, viewDirEc, directionalLightDirection[0], directionalLightColor[0]);
+    gl_FragColor = vec4(color, 1.0);
+    //gl_FragColor = vec4(diffuseMaterial, 1.0);
 }
