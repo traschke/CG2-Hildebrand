@@ -74,31 +74,36 @@ void main() {
 */
 
 vec3 phong(vec3 p, vec3 v, vec3 n, vec3 lightPos, vec3 lightColor) {
-    if(dot(v,n) < 0.0)
-        return vec3(0,0,0); // back-face
+    // Check if backface
+    if (dot(n, v) < 0.0) {
+        return vec3(0, 0, 0);
+    }
 
-    vec3 toLight = normalize(lightPos - p);
-    vec3 reflectLight = reflect(-toLight, n);
+    // Vector from viewpoint to light
+    vec3 toLight = normalize(lightPos);
+    // Reflect light
+    vec3 reflect = reflect(toLight, n);
 
-    float ndots = max( dot(toLight,n), 0.0);
-    float rdotv = max( dot(reflectLight, v), 0.0);
+    float nDotL = dot(n, -toLight);
+    float rDotV = max(dot(reflect, v), 0.0);
 
     vec3 ambi = ambientMaterial * ambientLightColor[0];
-    vec3 diff = diffuseMaterial * ndots * lightColor;
-    vec3 spec = specularMaterial * pow(rdotv, shininessMaterial) * lightColor;
+    vec3 diff = diffuseMaterial * lightColor * nDotL;
+    vec3 spec = specularMaterial * lightColor * pow(rDotV, shininessMaterial);
+
+    // Check if light is behind the surface
+    if (nDotL <= 0.0) {
+        return ambi;
+    }
 
     return ambi + diff + spec;
 }
 
 void main() {
-    vec3 normalizedEcNormal = normalize(ecNormal);
-
     bool useOtho = threeProjectionMatrix[2][3] == 0.0;
 
     vec3 viewDirEc = useOtho ? vec3(0, 0, 1) : normalize(-ecPosition.xyz);
 
-    vec3 color = phong(ecPosition.xyz, normalizedEcNormal, viewDirEc, normalize(directionalLightDirection[0]), directionalLightColor[0]);
-    //vec3 color = phong(ecPosition.xyz, normalizedEcNormal, viewDirEc, directionalLightDirection[0], directionalLightColor[0]);
+    vec3 color = phong(ecPosition.xyz, ecNormal, viewDirEc, normalize(directionalLightDirection[0]), directionalLightColor[0]);
     gl_FragColor = vec4(color, 1.0);
-    //gl_FragColor = vec4(diffuseMaterial, 1.0);
 }
