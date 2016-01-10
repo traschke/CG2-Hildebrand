@@ -28,6 +28,22 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
              */
             this.animationInterval;
 
+            this.directionalLightRotationInterval;
+
+
+            var quat = new THREE.Quaternion();
+            var axis = new THREE.Vector3(0, 1, 0).normalize();
+            var angle = 0;
+            var light = new THREE.Vector3(-1, 0, -0.3).normalize();
+
+            var directionalLightRotate = function(value) {
+
+                angle += 0.002;
+                quat.setFromAxisAngle(axis, angle);
+                light = light.applyQuaternion(quat);
+                scene.currentDirectionalLight.position.set(light.x, light.y, light.z);
+            };
+
             var rotateX = function(value) {
                 scene.currentMesh.rotation.x += value;
             };
@@ -211,8 +227,21 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
                 var dLight = new THREE.DirectionalLight('#FFFFFF', 1);
                 dLight.name = "dLight";
                 dLight.position.set(-1, 0, -0.3).normalize();
+                //dLight.translateX(-1.0);
+                //dLight.translateY(0);
+                //dLight.translateZ(-0.3);
+                //dLight.position.normalize();
                 scene.addLight(aLight);
                 scene.addLight(dLight);
+            });
+
+            $('#chkPlanetSunAnimation').change(function() {
+                if ($(this).is(':checked')) {
+                    console.log("Sun rotation started!");
+                    this.directionalLightRotationInterval = setInterval(directionalLightRotate, 20);
+                } else {
+                    clearInterval(this.directionalLightRotationInterval);
+                }
             });
 
             $('#btnNewExplosion').click(function() {
