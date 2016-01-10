@@ -111,6 +111,9 @@ define(["three", "util", "shaders", "BufferGeometry", "random", "band", "robot"]
                 if (light instanceof THREE.Light) {
                     console.log("Addded light", light, "to the scene.");
                     scope.scene.add(light);
+                    if (light instanceof  THREE.DirectionalLight) {
+                        scope.currentDirectionalLight = light;
+                    }
                 } else {
                     console.log(light, "is not a valid THREE.light");
                 }
