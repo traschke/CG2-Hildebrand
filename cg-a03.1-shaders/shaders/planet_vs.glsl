@@ -36,7 +36,8 @@ void main() {
 
     ecPosition = modelViewMatrix * vec4(position, 1.0);
     ecNormal = normalize(normalMatrix * normal);
-    //TODO Calculate vUv
+
+    vUv = uv;
 
     threeProjectionMatrix = projectionMatrix;
 
