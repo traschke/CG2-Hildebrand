@@ -17,6 +17,10 @@ uniform vec3 ambientMaterial;
 uniform float shininessMaterial;
 
 // uniform sampler2D textures
+uniform sampler2D textureDay;
+uniform sampler2D textureCloud;
+uniform sampler2D textureNight;
+uniform sampler2D textureTopo;
 
 // three js only supports int no bool
 // if you want a boolean value in the shader, use int
@@ -24,6 +28,7 @@ uniform float shininessMaterial;
 // data from the vertex shader
 varying vec4 ecPosition;
 varying vec3 ecNormal;
+// Texture coordinates vUv
 varying vec2 vUv;
 varying mat4 threeProjectionMatrix;
 
@@ -73,23 +78,24 @@ void main() {
 
 */
 
-vec3 phong(vec3 p, vec3 v, vec3 n, vec3 lightPos, vec3 lightColor) {
+vec3 phong(vec3 p, vec3 v, vec3 n, vec3 ambientColor, vec3 diffuseColor, vec3 specularColor, float shininess,
+           vec3 directionalLightPos, vec3 directionalLightColor, vec3 ambientLightColor) {
     // Check if backface
     if (dot(n, v) < 0.0) {
         return vec3(0, 0, 0);
     }
 
     // Vector from viewpoint to light
-    vec3 toLight = normalize(lightPos);
+    vec3 toLight = normalize(directionalLightPos);
     // Reflect light
     vec3 reflect = reflect(toLight, n);
 
     float nDotL = dot(n, -toLight);
     float rDotV = max(dot(reflect, v), 0.0);
 
-    vec3 ambi = ambientMaterial * ambientLightColor[0];
-    vec3 diff = diffuseMaterial * lightColor * nDotL;
-    vec3 spec = specularMaterial * lightColor * pow(rDotV, shininessMaterial);
+    vec3 ambi = ambientColor * ambientLightColor;
+    vec3 diff = diffuseColor * directionalLightColor * nDotL;
+    vec3 spec = specularColor * directionalLightColor * pow(rDotV, shininess);
 
     // Check if light is behind the surface
     if (nDotL <= 0.0) {
@@ -104,6 +110,13 @@ void main() {
 
     vec3 viewDirEc = useOtho ? vec3(0, 0, 1) : normalize(-ecPosition.xyz);
 
-    vec3 color = phong(ecPosition.xyz, ecNormal, viewDirEc, normalize(directionalLightDirection[0]), directionalLightColor[0]);
+    vec3 textureColor = texture2D(textureDay, vUv).rgb;
+
+    vec3 color = phong(ecPosition.xyz, ecNormal, viewDirEc, ambientMaterial, textureColor, specularMaterial,
+                       shininessMaterial, normalize(directionalLightDirection[0]), directionalLightColor[0],
+                       ambientLightColor[0]);
+    /*vec3 color = phong(ecPosition.xyz, ecNormal, viewDirEc, ambientMaterial, diffuseMaterial, specularMaterial,
+                       shininessMaterial, normalize(directionalLightDirection[0]), directionalLightColor[0],
+                       ambientLightColor[0]);*/
     gl_FragColor = vec4(color, 1.0);
 }
