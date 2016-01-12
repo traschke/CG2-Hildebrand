@@ -37,7 +37,6 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
             var light = new THREE.Vector3(-1, 0, -0.3).normalize();
 
             var directionalLightRotate = function(value) {
-
                 angle += 0.002;
                 quat.setFromAxisAngle(axis, angle);
                 light = light.applyQuaternion(quat);
@@ -227,10 +226,6 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
                 var dLight = new THREE.DirectionalLight('#FFFFFF', 1);
                 dLight.name = "dLight";
                 dLight.position.set(-1, 0, -0.3).normalize();
-                //dLight.translateX(-1.0);
-                //dLight.translateY(0);
-                //dLight.translateZ(-0.3);
-                //dLight.position.normalize();
                 scene.addLight(aLight);
                 scene.addLight(dLight);
             });
