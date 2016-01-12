@@ -39,16 +39,28 @@ define(["three", "shaders"],
                             value: 16.0
                         },
                         textureDay: {
-                            type: 't',
+                            type: 't'
                         },
                         textureCloud: {
-                            type: 't',
+                            type: 't'
                         },
                         textureNight: {
-                            type: 't',
+                            type: 't'
                         },
                         textureTopo: {
-                            type: 't',
+                            type: 't'
+                        },
+                        showDayTexture: {
+                            type: 'i',
+                            value: 1
+                        },
+                        showNightTexture: {
+                            type: 'i',
+                            value: 1
+                        },
+                        showCloudTexture: {
+                            type: 'i',
+                            value: 1
                         }
                     }
                 ]),
@@ -85,8 +97,8 @@ define(["three", "shaders"],
                 t.needsUpdate = true;
                 material.uniforms.textureTopo.value = t;
             });
-            
-            scope.mesh = new THREE.Mesh( new THREE.SphereGeometry(400, 100, 100), material);
+
+            scope.mesh = new THREE.Mesh( new THREE.SphereGeometry(500, 100, 100), material);
             scope.mesh.name = "planet";
 
             scope.root.add(scope.mesh);
