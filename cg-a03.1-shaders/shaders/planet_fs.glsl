@@ -24,6 +24,9 @@ uniform sampler2D textureTopo;
 
 // three js only supports int no bool
 // if you want a boolean value in the shader, use int
+uniform int showDayTexture;
+uniform int showNightTexture;
+uniform int showCloudTexture;
 
 // data from the vertex shader
 varying vec4 ecPosition;
@@ -78,8 +81,11 @@ void main() {
 
 */
 
-vec3 phong(vec3 p, vec3 v, vec3 n, vec3 ambientColor, vec3 diffuseColor, vec3 specularColor, float shininess,
-           vec3 directionalLightPos, vec3 directionalLightColor, vec3 ambientLightColor) {
+vec3 phong(vec3 p, vec3 v, vec3 n,
+           vec3 ambientColor, vec3 diffuseColor, vec3 specularColor, float shininess,
+           vec3 textureDayColor, vec3 textureNightColor, vec3 textureCloudColor,
+           vec3 directionalLightPos, vec3 directionalLightColor, vec3 ambientLightColor,
+           int showDayTexture, int showNightTexture, int showCloudTexture) {
     // Check if backface
     if (dot(n, v) < 0.0) {
         return vec3(0, 0, 0);
@@ -93,8 +99,30 @@ vec3 phong(vec3 p, vec3 v, vec3 n, vec3 ambientColor, vec3 diffuseColor, vec3 sp
     float nDotL = dot(n, -toLight);
     float rDotV = max(dot(reflect, v), 0.0);
 
-    vec3 ambi = ambientColor * ambientLightColor;
-    vec3 diff = diffuseColor * directionalLightColor * nDotL;
+    float multiplier = (0.0 - clamp(nDotL, 0.0, 0.5) + 0.5) * 2.0;
+
+
+    vec3 ambi;
+    if (showNightTexture == 1) {
+        ambi = textureNightColor * ambientLightColor;
+    } else {
+        ambi = ambientColor * ambientLightColor;
+    }
+
+    vec3 diff;
+    if (showDayTexture == 1) {
+        diff = textureDayColor * directionalLightColor * nDotL;
+    } else {
+        diff = diffuseColor * directionalLightColor * nDotL;
+    }
+
+    // Mix clouds for night with ambient color (-textureCloudColor for black clouds)
+    // Mix clouds for day with diffuse color
+    if (showCloudTexture == 1) {
+        ambi = mix(ambi, -textureCloudColor * ambientLightColor * multiplier, textureCloudColor.x);
+        diff = mix(diff, textureCloudColor * nDotL * 1.5, textureCloudColor.x);
+    }
+
     vec3 spec = specularColor * directionalLightColor * pow(rDotV, shininess);
 
     // Check if light is behind the surface
@@ -110,13 +138,14 @@ void main() {
 
     vec3 viewDirEc = useOtho ? vec3(0, 0, 1) : normalize(-ecPosition.xyz);
 
-    vec3 textureColor = texture2D(textureDay, vUv).rgb;
+    vec3 textureDayColor = texture2D(textureDay, vUv).rgb * 1.5;
+    vec3 textureNightColor = texture2D(textureNight, vUv).rgb * 1.5;
+    vec3 textureCloudColor = texture2D(textureCloud, vUv).rgb;
 
-    vec3 color = phong(ecPosition.xyz, ecNormal, viewDirEc, ambientMaterial, textureColor, specularMaterial,
-                       shininessMaterial, normalize(directionalLightDirection[0]), directionalLightColor[0],
-                       ambientLightColor[0]);
-    /*vec3 color = phong(ecPosition.xyz, ecNormal, viewDirEc, ambientMaterial, diffuseMaterial, specularMaterial,
-                       shininessMaterial, normalize(directionalLightDirection[0]), directionalLightColor[0],
-                       ambientLightColor[0]);*/
+    vec3 color = phong(ecPosition.xyz, ecNormal, viewDirEc,
+                       ambientMaterial, diffuseMaterial, specularMaterial, shininessMaterial,
+                       textureDayColor, textureNightColor, textureCloudColor,
+                       normalize(directionalLightDirection[0]), directionalLightColor[0], ambientLightColor[0],
+                       showDayTexture, showNightTexture, showCloudTexture);
     gl_FragColor = vec4(color, 1.0);
 }
