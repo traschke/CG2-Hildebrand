@@ -222,8 +222,8 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
                 var planet = new Planet();
                 scene.addMesh(planet.getMesh());
 
-                var aLight = new THREE.AmbientLight('#FFFFFF');
-                var dLight = new THREE.DirectionalLight('#FFFFFF', 1);
+                var aLight = new THREE.AmbientLight('#ADADAD');
+                var dLight = new THREE.DirectionalLight('#FFF8D1', 1);
                 dLight.name = "dLight";
                 dLight.position.set(-1, 0, -0.3).normalize();
                 scene.addLight(aLight);
