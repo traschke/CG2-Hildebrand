@@ -82,7 +82,7 @@ void main() {
 */
 
 vec3 phong(vec3 p, vec3 v, vec3 n,
-           vec3 ambientColor, vec3 diffuseColor, vec3 specularColor, float shininess,
+           vec3 kA, vec3 kD, vec3 kS, float a,
            vec3 textureDayColor, vec3 textureNightColor, vec3 textureCloudColor,
            vec3 directionalLightPos, vec3 directionalLightColor, vec3 ambientLightColor,
            int showDayTexture, int showNightTexture, int showCloudTexture) {
@@ -92,41 +92,44 @@ vec3 phong(vec3 p, vec3 v, vec3 n,
     }
 
     // Vector from viewpoint to light
-    vec3 toLight = normalize(directionalLightPos);
+    vec3 s = normalize(directionalLightPos);
+//    vec3 s = normalize(directionalLightPos - p);
     // Reflect light
-    vec3 reflect = reflect(toLight, n);
+    vec3 r = reflect(s, n);
+//    vec3 r = reflect(-toLight, n);
 
-    float nDotL = dot(n, -toLight);
-    float rDotV = max(dot(reflect, v), 0.0);
-
-    float multiplier = (0.0 - clamp(nDotL, 0.0, 0.5) + 0.5) * 2.0;
-
+    float nDotS = max(dot(n, -s), 0.0);
+//    float nDotS = max(dot(toLight, n), 0.0);
+    float rDotV = max(dot(r, v), 0.0);
 
     vec3 ambi;
     if (showNightTexture == 1) {
         ambi = textureNightColor * ambientLightColor;
     } else {
-        ambi = ambientColor * ambientLightColor;
+        ambi = kA * ambientLightColor;
     }
+    ambi = ambi * (1.0 - nDotS);
 
     vec3 diff;
     if (showDayTexture == 1) {
-        diff = textureDayColor * directionalLightColor * nDotL;
+        diff = textureDayColor * directionalLightColor * nDotS;
     } else {
-        diff = diffuseColor * directionalLightColor * nDotL;
+        diff = kD * directionalLightColor * nDotS;
     }
 
     // Mix clouds for night with ambient color (-textureCloudColor for black clouds)
     // Mix clouds for day with diffuse color
     if (showCloudTexture == 1) {
-        ambi = mix(ambi, -textureCloudColor * ambientLightColor * multiplier, textureCloudColor.x);
-        diff = mix(diff, textureCloudColor * nDotL * 1.5, textureCloudColor.x);
+        ambi = mix(ambi, -textureCloudColor * ambientLightColor, textureCloudColor.x);
+        diff = mix(diff, textureCloudColor * nDotS * 1.5, textureCloudColor.x);
     }
 
-    vec3 spec = specularColor * directionalLightColor * pow(rDotV, shininess);
+    vec3 spec = kS * directionalLightColor * pow(rDotV, a);
+
+
 
     // Check if light is behind the surface
-    if (nDotL <= 0.0) {
+    if (nDotS <= 0.0) {
         return ambi;
     }
 
@@ -145,7 +148,7 @@ void main() {
     vec3 color = phong(ecPosition.xyz, ecNormal, viewDirEc,
                        ambientMaterial, diffuseMaterial, specularMaterial, shininessMaterial,
                        textureDayColor, textureNightColor, textureCloudColor,
-                       normalize(directionalLightDirection[0]), directionalLightColor[0], ambientLightColor[0],
+                       directionalLightDirection[0], directionalLightColor[0], ambientLightColor[0],
                        showDayTexture, showNightTexture, showCloudTexture);
     gl_FragColor = vec4(color, 1.0);
 }

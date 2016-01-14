@@ -36,7 +36,7 @@ define(["three", "shaders"],
                         },
                         shininessMaterial: {
                             type: 'f',
-                            value: 16.0
+                            value: 8.0
                         },
                         textureDay: {
                             type: 't'

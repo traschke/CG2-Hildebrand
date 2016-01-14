@@ -39,7 +39,7 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
             var directionalLightRotate = function(value) {
                 angle += 0.002;
                 quat.setFromAxisAngle(axis, angle);
-                light = light.applyQuaternion(quat);
+                light = light.applyQuaternion(quat).normalize();
                 scene.currentDirectionalLight.position.set(light.x, light.y, light.z);
             };
 
