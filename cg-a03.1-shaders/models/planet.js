@@ -4,7 +4,7 @@ define(["three", "shaders"],
 
         "use strict";
 
-        var Planet = function() {
+        var Planet = function(showDayTexture, showNightTexture, showCloudTexture) {
 
 
             this.root = new THREE.Object3D();
@@ -52,15 +52,15 @@ define(["three", "shaders"],
                         },
                         showDayTexture: {
                             type: 'i',
-                            value: 1
+                            value: showDayTexture
                         },
                         showNightTexture: {
                             type: 'i',
-                            value: 1
+                            value: showNightTexture
                         },
                         showCloudTexture: {
                             type: 'i',
-                            value: 1
+                            value: showCloudTexture
                         }
                     }
                 ]),
