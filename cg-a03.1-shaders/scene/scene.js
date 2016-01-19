@@ -32,7 +32,7 @@ define(["three", "util", "shaders", "BufferGeometry", "random", "band", "robot"]
             scope.camera.position.z = 1000;
             scope.scene = new THREE.Scene();
 
-            scope.scene.add(new THREE.AmbientLight(0xFFFFFF));
+            //scope.scene.add(new THREE.AmbientLight(0xFFFFFF));
 
             // Add a listener for 'keydown' events. By this listener, all key events will be
             // passed to the function 'onDocumentKeyDown'. There's another event type 'keypress'.
@@ -105,6 +105,23 @@ define(["three", "util", "shaders", "BufferGeometry", "random", "band", "robot"]
                 scope.currentMesh = bufferGeometry.getMesh();
                 scope.scene.add( scope.currentMesh );
 
+            };
+
+            this.addLight = function(light) {
+                if (light instanceof THREE.Light) {
+                    console.log("Addded light", light, "to the scene.");
+                    scope.scene.add(light);
+                    if (light instanceof  THREE.DirectionalLight) {
+                        scope.currentDirectionalLight = light;
+                    }
+                } else {
+                    console.log(light, "is not a valid THREE.light");
+                }
+            };
+
+            this.addMesh = function(mesh) {
+                scope.currentMesh = mesh;
+                scope.scene.add(scope.currentMesh);
             }
 
 
