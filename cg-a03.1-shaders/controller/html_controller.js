@@ -30,12 +30,17 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
 
             this.directionalLightRotationInterval;
 
-            var angle = 0;
 
-            var directionalLightRotate = function(angle) {
-                var quat = new THREE.Quaternion();
-                quat.setFromAxisAngle(new THREE.Vector3(0, 1, 0).normalize(), angle);
-                scene.currentDirectionalLight.position.applyQuaternion(quat).normalize();
+            var quat = new THREE.Quaternion();
+            var axis = new THREE.Vector3(0, 1, 0).normalize();
+            var angle = 0;
+            var light = new THREE.Vector3(-1, 0, -0.3).normalize();
+
+            var directionalLightRotate = function(value) {
+                angle += 0.002;
+                quat.setFromAxisAngle(axis, angle);
+                light = light.applyQuaternion(quat).normalize();
+                scene.currentDirectionalLight.position.set(light.x, light.y, light.z);
             };
 
             var rotateX = function(value) {
@@ -214,7 +219,8 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
              */
             $('#btnNewPlanet').click(function() {
                 console.log("Creating a new planet...");
-                var planet = new Planet($('#chkPlanetDayTexture').is(':checked'), $('#chkPlanetNightTexture').is(':checked'), $('#chkPlanetCloudsTexture').is(':checked'));
+                console.log(scene);
+                var planet = new Planet();
                 scene.addMesh(planet.getMesh());
 
                 var aLight = new THREE.AmbientLight('#ADADAD');
@@ -228,7 +234,7 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
             $('#chkPlanetSunAnimation').change(function() {
                 if ($(this).is(':checked')) {
                     console.log("Sun rotation started!");
-                    this.directionalLightRotationInterval = setInterval(directionalLightRotate, 20, 0.02);
+                    this.directionalLightRotationInterval = setInterval(directionalLightRotate, 20);
                 } else {
                     clearInterval(this.directionalLightRotationInterval);
                 }
@@ -237,6 +243,8 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
             $('#btnNewExplosion').click(function() {
                console.log("Creating new explosion...");
                 //TODO Implement
+                var explosion = new Explosion();
+                scene.addMesh(explosion.getMesh());
             });
 
             /**

@@ -1,7 +1,7 @@
 
 // we need two varying variables
-//varying 
-//varying 
+varying vec2 vUv;
+varying float noise;
 
 
 uniform float time;
@@ -162,8 +162,18 @@ void main() {
     // assign varying variables for vertex shader
     // 
 
+    vUv = uv;
 
-    // vec3 displacedPosition = ...
-    // gl_Position = ...
+    // get a turbulent 3d noise using the normal, normal to high freq
+    noise = noise3D(normal) + time;
+
+    // get a 3d noise using the position, low frequency
+    float b = freqScale * noise3D(position);
+
+    // compose both noises
+    
+    // move the position along the normal and transform it
+    vec3 newPosition = position * noise + freqScale;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
 
 }
