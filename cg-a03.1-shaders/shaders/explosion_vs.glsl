@@ -164,16 +164,15 @@ void main() {
 
     vUv = uv;
 
-    // get a turbulent 3d noise using the normal, normal to high freq
-    noise = noise3D(normal) + time;
+    noise = -1.9 * noise3D(normal*0.18 + time);
 
     // get a 3d noise using the position, low frequency
-    float b = freqScale * noise3D(position);
+    float b = noise3D(position) * weight;
 
     // compose both noises
     
     // move the position along the normal and transform it
-    vec3 newPosition = position * noise + freqScale;
+    vec3 newPosition = position * noise;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
 
 }

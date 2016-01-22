@@ -236,9 +236,14 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
             });
 
             $('#btnNewExplosion').click(function() {
+                var config = {
+                    frequencyScale : parseFloat($('#nmbExplosionFrequencyScale').attr('value').replace( /,/,"." )),
+                    colorScale : parseFloat($('#nmbExplosionColorScale').attr('value').replace( /,/,"." )),
+                    weight : parseFloat($('#nmbExplosionWeight').attr('value').replace( /,/,"." ))
+                };
                console.log("Creating new explosion...");
                 //TODO Implement
-                var explosion = new Explosion();
+                var explosion = new Explosion(config);
                 scene.addMesh(explosion.getMesh());
             });
 

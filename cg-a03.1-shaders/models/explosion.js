@@ -4,8 +4,11 @@ define(["jquery", "three", "shaders"],
 
         "use strict";
 
-        var Explosion = function() {
+        var Explosion = function(config) {
 
+            var frequencyScale = config.frequencyScale;
+            var colorScale = config.colorScale;
+            var weight = config.weight;
 
             this.root = new THREE.Object3D();
 
@@ -45,15 +48,15 @@ define(["jquery", "three", "shaders"],
 
                         weight: {
                             type: "f", 
-                            value: 0.0 
+                            value: weight 
                         },
                         freqScale: {
                             type: "f", 
-                            value: 0.0 
+                            value: frequencyScale 
                         },
                         colorScale: {
                             type: "f", 
-                            value: 0.0                             
+                            value: colorScale                             
                         }
                     },
 

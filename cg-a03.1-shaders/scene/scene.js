@@ -17,6 +17,7 @@ define(["three", "util", "shaders", "BufferGeometry", "random", "band", "robot"]
 
         "use strict";
 
+        var start = Date.now();
         /*
          * Scene constructor
          */
@@ -129,6 +130,12 @@ define(["three", "util", "shaders", "BufferGeometry", "random", "band", "robot"]
              * drawing the scene
              */
             this.draw = function() {
+
+                var explosion = scope.scene.getObjectByName('explosion');
+                if(explosion){
+                    // start wird zur Laufzeit mit Date.now() initialisiert .
+                    explosion.material.uniforms['time'].value = .00035 * (Date.now() - start);
+                }
 
                 requestAnimFrame( scope.draw );
 
