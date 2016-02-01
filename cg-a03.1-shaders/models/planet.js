@@ -103,9 +103,15 @@ define(["three", "shaders"],
 
             scope.root.add(scope.mesh);
 
+            this.material = material;
+
             this.getMesh = function() {
                 return this.root;
             };
+
+            this.getMaterial = function() {
+                return this.material;
+            }
 
 
         }; // constructor
