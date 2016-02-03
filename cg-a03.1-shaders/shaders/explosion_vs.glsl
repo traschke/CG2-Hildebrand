@@ -164,7 +164,7 @@ void main() {
 
     vUv = uv;
 
-    noise = -1.9 * noise3D(normal * freqScale + time) * weight;
+    noise = noise3D(normal * freqScale + time) * (weight * -1.0);
 
     // get a 3d noise using the position, low frequency
     float b = noise3D(position) * weight;
