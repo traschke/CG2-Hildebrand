@@ -69,9 +69,7 @@ define(["jquery", "three", "shaders"],
             scope.mesh.name = "explosion";
             scope.root.add(scope.mesh);
 
-
-
-
+            this.material = material;
 
             this.getMesh = function() {
                 return this.root;
@@ -79,6 +77,10 @@ define(["jquery", "three", "shaders"],
 
             this.animate = function() {
                 
+            }
+
+            this.getMaterial = function() {
+                return this.material;
             }
 
 

@@ -22,6 +22,7 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
         var HtmlController = function(scene) {
 
             var lastPlanet = undefined;
+            var lastExplosion = undefined;
 
             /**
              * The interval that handles the animation.
@@ -277,6 +278,26 @@ define(["jquery", "BufferGeometry", "random", "band", 'ellipsoid', 'cosine', 'fu
                 //TODO Implement
                 var explosion = new Explosion(config);
                 scene.addMesh(explosion.getMesh());
+
+                lastExplosion = explosion;
+            });
+
+            $('#nmbExplosionFrequencyScale').change(function() {
+                var val = parseFloat($('#nmbExplosionFrequencyScale').attr('value').replace( /,/,"." ));
+                console.log('Frequency changed to:', val)
+                lastExplosion.getMaterial().uniforms.freqScale.value = val;
+            });
+
+            $('#nmbExplosionColorScale').change(function() {
+                var val = parseFloat($('#nmbExplosionColorScale').attr('value').replace( /,/,"." ));
+                console.log('colorScale changed to:', val)
+                lastExplosion.getMaterial().uniforms.colorScale.value = val;
+            });
+
+            $('#nmbExplosionWeight').change(function() {
+                var val = parseFloat($('#nmbExplosionWeight').attr('value').replace( /,/,"." ));
+                console.log('Weight changed to:', val)
+                lastExplosion.getMaterial().uniforms.weight.value = val;
             });
 
             /**
